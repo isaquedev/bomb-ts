@@ -2,8 +2,11 @@ import game from "./game.js"
 import { isTileAvailable } from './utils.js';
 import tilesConfig from './tiles_config.js';
 import bombManager from './bombs.js';
+import times from './times.js';
 
 const player: IPlayer = {
+  hp: 10,
+  isInvulnerable: false,
   start: () => {
     document.addEventListener('keydown', event => {
       let action = player.actions.keyCodes.find(keyCode => keyCode.key === event.keyCode)
@@ -25,6 +28,17 @@ const player: IPlayer = {
   position: {
     x: 0,
     y: 0
+  },
+  damage: () => {
+    if (player.isInvulnerable) return;
+
+    if (player.hp > 0) {
+      player.hp -= 1;
+      player.isInvulnerable = true
+      setTimeout(() => player.isInvulnerable = false, times.playerInvulnerability)
+      //TODO damage animation
+      console.log('damage')
+    }
   },
   move: () => {
     let newPos: IPosition
@@ -67,7 +81,7 @@ const player: IPlayer = {
         id: bombId,
         x: pos.x,
         y: pos.y,
-        timeOut: setTimeout(() => {bombManager.explode(bombId, pos)}, 1500)
+        timeOut: setTimeout(() => bombManager.explode(bombId, pos), times.bombDelayToExplode)
       })
 
       layer.splice(1, 0, bomb.id)

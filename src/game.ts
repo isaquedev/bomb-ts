@@ -1,7 +1,7 @@
 import tilesConfig from './tiles_config.js';
 import { fase1 } from './scenarios.js';
 import player from './player.js';
-import { getTileById } from './utils.js'
+import { getTileById, arrayContains } from './utils.js'
 
 const game: IGame = {
   context: null,
@@ -31,6 +31,9 @@ const game: IGame = {
           let posX = x * tilesConfig.tileSize + (tilesConfig.tileSize / 100 * (tilesConfig.tileSize - size))
           let posY = y * tilesConfig.tileSize + (tilesConfig.tileSize / 100 * (tilesConfig.tileSize - size))
           game.context.fillRect(posX, posY, size, size);
+        }
+        if (arrayContains(game.scenario[x][y], tilesConfig.tiles.player.id) && arrayContains(game.scenario[x][y], tilesConfig.tiles.explosion.id)) {
+          player.damage()
         }
       }
     }

@@ -2,6 +2,7 @@ import game from "./game.js"
 import player from "./player.js"
 import tilesConfig from "./tiles_config.js"
 import { getBombIndex, getLayer, isTileExplosivable, isTileDestructive } from './utils.js'
+import times from './times.js';
 
 const bombManager: IBombManager = {
   bombs: [],
@@ -20,9 +21,7 @@ const bombManager: IBombManager = {
       { active: true, x: 0,   y: 1 }
     ]
     for (let exp = 1; exp <= power; exp++) {
-      console.log(exp, power)
       for (let direction = 0; direction < directions.length; direction++) {
-        console.log(directions[direction])
         if (directions[direction].active) {
           let newPos = { x: pos.x + (directions[direction].x * exp), y: pos.y + (directions[direction].y * exp) }
           let layer = getLayer(newPos)
@@ -36,16 +35,10 @@ const bombManager: IBombManager = {
           } else {
             directions[direction].active = false
           }
-          console.log(pos, directions[direction], newPos, layer)
         }
       }
     }
-    explosion.find(expPos => {
-      if (expPos.x == player.position.x && expPos.y == player.position.y) {
-        alert('player dead')
-      }
-    })
-    setTimeout(() => { bombManager.clean(explosion) }, 1000)
+    setTimeout(() => { bombManager.clean(explosion) }, times.explosionDuration)
   },
   clean: (explosion: Array<IPosition>) => {
     for (let i = 0; i < explosion.length; i++) {

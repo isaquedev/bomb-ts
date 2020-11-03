@@ -75,3 +75,7 @@ export const getBombIndex: IGetBombIndex = (pos: IPosition): number => {
   let bombIndex = game.scenario[pos.x][pos.y].indexOf(bombTile.id)
   return bombIndex
 }
+
+export const arrayContains: IArrayContains = (array: Array<any>, value: any): boolean => {
+  return array.indexOf(value) !== -1;
+}

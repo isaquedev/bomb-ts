@@ -64,8 +64,11 @@ interface IBomb {
 
 //player.ts
 interface IPlayer {
+  hp: number;
+  isInvulnerable: boolean;
   start: Function;
   update: Function;
+  damage: Function;
   position: IPosition;
   move: Function;
   leaveBomb: Function,
@@ -106,3 +109,12 @@ interface IIsTileDestructive { (layer: Array<number>): boolean }
 interface IGetLayer { (pos: IPosition): Array<number> }
 
 interface IGetBombIndex { (pos: IPosition): number }
+
+interface IArrayContains { (array: Array<any>, value: any): boolean }
+
+//times.ts
+interface ITimes {
+  playerInvulnerability: number,
+  bombDelayToExplode: number,
+  explosionDuration: number
+}

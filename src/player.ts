@@ -3,37 +3,6 @@ import { isTileAvailable } from './utils.js';
 import tilesConfig from './tiles_config.js';
 import bombManager from './bombs.js';
 
-interface IPlayer {
-  start: Function;
-  update: Function;
-  position: IPosition;
-  move: Function;
-  leaveBomb: Function,
-  actions: IPlayerActions;
-}
-
-interface IPlayerActions {
-  keyCodes: Array<IPlayerActionKey>;
-  status: IPlayerActionStatus;
-}
-
-interface IPlayerActionKey {
-  key: number;
-  name: string
-}
-
-interface IPlayerActionStatusKey {
-  [key: string]: boolean
-}
-
-interface IPlayerActionStatus extends IPlayerActionStatusKey {
-  moveLeft: boolean;
-  moveRight: boolean;
-  moveTop: boolean;
-  moveBot: boolean;
-  leaveBomb: boolean;
-}
-
 const player: IPlayer = {
   start: () => {
     document.addEventListener('keydown', event => {

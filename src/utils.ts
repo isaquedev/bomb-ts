@@ -1,14 +1,6 @@
 import game from "./game.js"
 import tilesConfig from './tiles_config.js';
 
-interface IIsValidCoordinate { (coordinate: IPosition, isPlayer?: boolean): boolean }
-
-export const isValidCoordinate: IIsValidCoordinate = (coordinate: IPosition, isPlayer = false): boolean => {
-  return coordinate.x >= 0 && coordinate.x < game.scenario.length && coordinate.y >= 0 && coordinate.y < game.scenario[0].length
-}
-
-interface IGetTileById { (tileId: number): ITileItem }
-
 export const getTileById: IGetTileById = (tileId: number): ITileItem => {
   let tile: ITileItem;
 
@@ -23,8 +15,6 @@ export const getTileById: IGetTileById = (tileId: number): ITileItem => {
   return tile;
 }
 
-interface IIsTileAvailable { (layer: Array<number>): boolean }
-
 export const isTileAvailable: IIsTileAvailable = (layer: Array<number>): boolean => {
   let available = layer.length > 0
   layer.forEach(tileId => {
@@ -38,8 +28,6 @@ export const isTileAvailable: IIsTileAvailable = (layer: Array<number>): boolean
   })
   return available;
 }
-
-interface IIsTileExplosivable { (layer: Array<number>): boolean }
 
 export const isTileExplosivable: IIsTileExplosivable = (layer: Array<number>): boolean => {
   let explosivable = layer.length > 0
@@ -56,8 +44,6 @@ export const isTileExplosivable: IIsTileExplosivable = (layer: Array<number>): b
   return explosivable
 }
 
-interface IIsTileDestructive { (layer: Array<number>): boolean }
-
 export const isTileDestructive: IIsTileDestructive = (layer: Array<number>): boolean => {
   let explosivable = false
   layer.forEach(tileId => {
@@ -73,9 +59,6 @@ export const isTileDestructive: IIsTileDestructive = (layer: Array<number>): boo
   return explosivable
 }
 
-
-interface IGetLayer { (pos: IPosition): Array<number> }
-
 export const getLayer: IGetLayer = (pos: IPosition): Array<number> => {
   let tilesX = game.scenario[pos.x]
   if (tilesX) {
@@ -86,8 +69,6 @@ export const getLayer: IGetLayer = (pos: IPosition): Array<number> => {
   }
   return []
 }
-
-interface IGetBombIndex { (pos: IPosition): number }
 
 export const getBombIndex: IGetBombIndex = (pos: IPosition): number => {
   let bombTile = tilesConfig.tiles.bomb

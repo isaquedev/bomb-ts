@@ -3,27 +3,6 @@ import player from "./player.js"
 import tilesConfig from "./tiles_config.js"
 import { getBombIndex, getLayer, isTileExplosivable, isTileDestructive } from './utils.js'
 
-interface IBombManagerExplode {
-  (id: number, pos: IPosition): void
-}
-
-interface IBombManagerClean {
-  (explosion: Array<IPosition>): void
-}
-
-interface IBombManager {
-  bombs: Array<IBomb>;
-  explode: IBombManagerExplode;
-  clean: IBombManagerClean;
-}
-
-interface IBomb {
-  id: number;
-  x: number;
-  y: number;
-  timeOut: number;
-}
-
 const bombManager: IBombManager = {
   bombs: [],
   explode: (id: number, pos: IPosition) => {

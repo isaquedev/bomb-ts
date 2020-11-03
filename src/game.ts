@@ -3,13 +3,6 @@ import { fase1 } from './scenarios.js';
 import player from './player.js';
 import { getTileById } from './utils.js'
 
-interface IGame {
-  context: CanvasRenderingContext2D;
-  start: Function;
-  update: Function;
-  scenario: Array<Array<Array<number>>>;
-}
-
 const game: IGame = {
   context: null,
   scenario: fase1,

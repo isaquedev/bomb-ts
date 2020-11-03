@@ -5,8 +5,13 @@ import bombManager from './bombs.js';
 import times from './times.js';
 
 const player: IPlayer = {
-  hp: 10,
-  isInvulnerable: false,
+  bomber: {
+    hp: 1,
+    dead: false,
+    isInvulnerable: false,
+    bombPower: 2,
+    bombCount: 2
+  },
   start: () => {
     document.addEventListener('keydown', event => {
       let action = player.actions.keyCodes.find(keyCode => keyCode.key === event.keyCode)
@@ -30,14 +35,18 @@ const player: IPlayer = {
     y: 0
   },
   damage: () => {
-    if (player.isInvulnerable) return;
+    if (player.bomber.isInvulnerable || player.bomber.dead) return;
 
-    if (player.hp > 0) {
-      player.hp -= 1;
-      player.isInvulnerable = true
-      setTimeout(() => player.isInvulnerable = false, times.playerInvulnerability)
+    if (player.bomber.hp > 1) {
       //TODO damage animation
+      player.bomber.hp -= 1;
+      player.bomber.isInvulnerable = true
+      setTimeout(() => player.bomber.isInvulnerable = false, times.playerInvulnerability)
       console.log('damage')
+    } else {
+      //TODO death animation
+      player.bomber.dead = true
+      alert('Player dead')
     }
   },
   move: () => {
@@ -70,18 +79,21 @@ const player: IPlayer = {
     }
   },
   leaveBomb: () => {
+    if (player.bomber.bombCount == 0) return;
+
     let layer = game.scenario[player.position.x][player.position.y]
     let bomb = tilesConfig.tiles.bomb
     if (player.actions.status.leaveBomb && layer.indexOf(bomb.id) === -1) {
       let bombId = Math.random()
 
       let pos = player.position
+      player.bomber.bombCount -= 1;
 
       bombManager.bombs.push({
         id: bombId,
         x: pos.x,
         y: pos.y,
-        timeOut: setTimeout(() => bombManager.explode(bombId, pos), times.bombDelayToExplode)
+        timeOut: setTimeout(() => bombManager.explode(bombId, pos, player.bomber.bombPower), times.bombDelayToExplode)
       })
 
       layer.splice(1, 0, bomb.id)

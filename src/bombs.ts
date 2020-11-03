@@ -1,19 +1,24 @@
 import game from "./game.js"
 import player from "./player.js"
 import tilesConfig from "./tiles_config.js"
-import { getBombIndex, getLayer, isTileExplosivable, isTileDestructive } from './utils.js'
+import { getLayer, isTileExplosivable, isTileDestructive } from './utils.js'
 import times from './times.js';
 
 const bombManager: IBombManager = {
   bombs: [],
-  explode: (id: number, pos: IPosition) => {
+  explode: (id: number, pos: IPosition, power: number) => {
+    player.bomber.bombCount += 1
+
     let bomb = bombManager.bombs.find(bomb => bomb.id == id)
+    let bombIndex = bombManager.bombs.indexOf(bomb)
+    bombManager.bombs.splice(bombIndex, 1)
+
     clearTimeout(bomb.timeOut)
     //TODO add bombs in bombs array to explode bomb on explosion colid with them
     let explosion: Array<IPosition> = [{x: pos.x, y: pos.y}]
-    let bombIndex = getBombIndex(pos)
-    game.scenario[pos.x][pos.y][bombIndex] = tilesConfig.tiles.explosion.id
-    let power = 3
+
+    let bombZIndex = game.scenario[pos.x][pos.y].indexOf(tilesConfig.tiles.bomb.id)
+    game.scenario[pos.x][pos.y][bombZIndex] = tilesConfig.tiles.explosion.id
     let directions = [
       { active: true, x: -1,  y: 0 },
       { active: true, x: 1,   y: 0 },

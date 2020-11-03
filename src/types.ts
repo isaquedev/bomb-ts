@@ -4,6 +4,15 @@ interface IPosition {
   y: number
 }
 
+//bombers files
+interface IBomber {
+  hp: number;
+  dead: boolean;
+  isInvulnerable: boolean;
+  bombPower: number;
+  bombCount: number
+}
+
 //game.ts
 interface IGame {
   context: CanvasRenderingContext2D;
@@ -48,7 +57,7 @@ interface IBombManager {
 }
 
 interface IBombManagerExplode {
-  (id: number, pos: IPosition): void
+  (id: number, pos: IPosition, power: number): void
 }
 
 interface IBombManagerClean {
@@ -64,8 +73,7 @@ interface IBomb {
 
 //player.ts
 interface IPlayer {
-  hp: number;
-  isInvulnerable: boolean;
+  bomber: IBomber;
   start: Function;
   update: Function;
   damage: Function;
@@ -107,8 +115,6 @@ interface IIsTileExplosivable { (layer: Array<number>): boolean }
 interface IIsTileDestructive { (layer: Array<number>): boolean }
 
 interface IGetLayer { (pos: IPosition): Array<number> }
-
-interface IGetBombIndex { (pos: IPosition): number }
 
 interface IArrayContains { (array: Array<any>, value: any): boolean }
 

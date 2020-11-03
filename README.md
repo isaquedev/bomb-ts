@@ -2,8 +2,6 @@
 ### A simple bomberman game in typescript
 by Isaque Hernandes
 
-&nbsp;
-
 ## How to setup
 Install typescript if you don't have:
 

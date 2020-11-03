@@ -57,7 +57,7 @@ interface IBombManager {
 }
 
 interface IBombManagerExplode {
-  (id: number, pos: IPosition, power: number): void
+  (id: number): void
 }
 
 interface IBombManagerClean {
@@ -68,6 +68,7 @@ interface IBomb {
   id: number;
   x: number;
   y: number;
+  power: number;
   timeOut: number;
 }
 

@@ -35,7 +35,7 @@ export const isTileExplosivable: IIsTileExplosivable = (layer: Array<number>): b
     let tile = getTileById(tileId)
     //TODO bomba precisa não ser atravessável e precisa ser acionada pela explosão
     if (tile) {
-      if (tile.physics && !tile.explosivable) {
+      if (tile.physics && !tile.explosivable && tile.id !== tilesConfig.tiles.bomb.id) {
         explosivable = false;
         return;
       }

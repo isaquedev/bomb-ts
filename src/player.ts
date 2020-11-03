@@ -10,7 +10,7 @@ const player: IPlayer = {
     dead: false,
     isInvulnerable: false,
     bombPower: 2,
-    bombCount: 2
+    bombCount: 3
   },
   start: () => {
     document.addEventListener('keydown', event => {
@@ -93,7 +93,8 @@ const player: IPlayer = {
         id: bombId,
         x: pos.x,
         y: pos.y,
-        timeOut: setTimeout(() => bombManager.explode(bombId, pos, player.bomber.bombPower), times.bombDelayToExplode)
+        power: player.bomber.bombPower,
+        timeOut: setTimeout(() => bombManager.explode(bombId), times.bombDelayToExplode)
       })
 
       layer.splice(1, 0, bomb.id)

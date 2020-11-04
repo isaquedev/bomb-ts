@@ -7,6 +7,7 @@ import times from './times.js';
 const bombManager: IBombManager = {
   bombs: [],
   explode: (id: number) => {
+    console.log('explode')
     player.bomber.bombCount += 1
 
     let bomb = bombManager.bombs.find(bomb => bomb.id == id)
@@ -17,8 +18,8 @@ const bombManager: IBombManager = {
     //TODO add bombs in bombs array to explode bomb on explosion colid with them
     let explosion: Array<IPosition> = [{x: bomb.x, y: bomb.y}]
 
-    let bombZIndex = game.scenario[bomb.x][bomb.y].indexOf(tilesConfig.tiles.bomb.id)
-    game.scenario[bomb.x][bomb.y][bombZIndex] = tilesConfig.tiles.explosion.id
+    let bombZIndex = game.getCoordinate(bomb).indexOf(tilesConfig.tiles.bomb.id)
+    game.getCoordinate(bomb)[bombZIndex] = tilesConfig.tiles.explosion.id
     let directions = [
       { active: true, x: -1,  y: 0 },
       { active: true, x: 1,   y: 0 },
@@ -34,7 +35,7 @@ const bombManager: IBombManager = {
           
           if (isTileExplosivable(layer)) {
             explosion.push(newPos)
-            game.scenario[newPos.x][newPos.y].splice(1, 0, tilesConfig.tiles.explosion.id)
+            game.getCoordinate(newPos).splice(0, 0, tilesConfig.tiles.explosion.id)
             if (arrayContains(layer, tilesConfig.tiles.bomb.id)) {
               directions[direction].active = false
               foundedBombs.push(bombManager.bombs.find(bomb => bomb.x == newPos.x && bomb.y == newPos.y))
@@ -57,9 +58,9 @@ const bombManager: IBombManager = {
   clean: (explosion: Array<IPosition>) => {
     for (let i = 0; i < explosion.length; i++) {
       let pos = explosion[i]
-      game.scenario[pos.x][pos.y].splice(1, 1) //TODO migrate to remote first explosion sprite
-      if (isTileDestructive(game.scenario[pos.x][pos.y])) {
-        game.scenario[pos.x][pos.y].splice(1, 1) //TODO migrate to remove first box sprite
+      game.getCoordinate(pos).splice(0, 1) //TODO migrate to remote first explosion sprite
+      if (isTileDestructive(game.getCoordinate(pos))) {
+        game.getCoordinate(pos).splice(0, 1) //TODO migrate to remove first box sprite
       }
     }
   }

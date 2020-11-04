@@ -48,6 +48,14 @@ const tilesConfig: ITileConfig = {
       size: 40,
       physics: false,
       explosivable: false
+    },
+    enemySimpleMove: {
+      id: 6,
+      name: 'enemy-simple-move',
+      color: 'red',
+      size: 40,
+      physics: false,
+      explosivable: false
     }
   }
 }

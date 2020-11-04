@@ -7,10 +7,16 @@ interface IPosition {
 //game.ts
 interface IGame {
   context: CanvasRenderingContext2D;
+  getCoordinate: IGameCoordinate;
   start: Function;
   update: Function;
+  drawTile: IGameTile;
   scenario: Array<Array<Array<number>>>;
 }
+
+interface IGameTile { (pos: IPosition, tile: ITileItem): void }
+
+interface IGameCoordinate { (pos: IPosition): Array<number> }
 
 //tiles_config.ts
 interface ITileConfig {

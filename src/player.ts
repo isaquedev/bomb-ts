@@ -10,7 +10,7 @@ const player: IPlayer = {
       hp: 1,
       dead: false,
       isInvulnerable: false,
-      position: {x: 0, y: 0}
+      position: {x: 1, y: 1}
     },
     methods: {
       start: () => {
@@ -50,30 +50,22 @@ const player: IPlayer = {
         let newPos: IPosition
         let pos = player.object.params.position
         if (player.actions.status.moveLeft) { //Move left
-          if (pos.x > 0) {
-            newPos = { x: pos.x - 1, y: pos.y }
-          }
+          newPos = { x: pos.x - 1, y: pos.y }
         } else if (player.actions.status.moveRight) { //Move right
-          if (pos.x < game.scenario.length - 1) {
-            newPos = { x: pos.x + 1, y: pos.y }
-          }
+          newPos = { x: pos.x + 1, y: pos.y }
         } else if (player.actions.status.moveTop) { //Move top
-          if (pos.y > 0) {
-            newPos = { x: pos.x, y: pos.y - 1 }
-          }
+          newPos = { x: pos.x, y: pos.y - 1 }
         } else if (player.actions.status.moveBot) { //Move bot
-          if (pos.y < game.scenario[0].length - 1) {
-            newPos = { x: pos.x, y: pos.y + 1 }
-          }
+          newPos = { x: pos.x, y: pos.y + 1 }
         }
     
-        if (newPos && isTileAvailable(game.scenario[newPos.x][newPos.y])) {
+        if (newPos && isTileAvailable(game.getCoordinate(newPos))) {
           let playerTile = tilesConfig.tiles.player
-          let playerIndexInLayer = game.scenario[pos.x][pos.y].indexOf(playerTile.id)
+          let playerIndexInLayer = game.getCoordinate(pos).indexOf(playerTile.id)
     
-          game.scenario[pos.x][pos.y].splice(playerIndexInLayer, 1)
+          game.getCoordinate(pos).splice(playerIndexInLayer, 1)
           player.object.params.position = newPos
-          game.scenario[newPos.x][newPos.y].push(playerTile.id)
+          game.getCoordinate(newPos).push(playerTile.id)
         }
       }
     }
@@ -87,7 +79,7 @@ const player: IPlayer = {
 
     let pos = player.object.params.position
 
-    let layer = game.scenario[pos.x][pos.y]
+    let layer = game.getCoordinate(pos)
     let bomb = tilesConfig.tiles.bomb
     if (player.actions.status.leaveBomb && layer.indexOf(bomb.id) === -1) {
       let bombId = Math.random()

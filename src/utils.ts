@@ -16,7 +16,7 @@ export const getTileById: IGetTileById = (tileId: number): ITileItem => {
 }
 
 export const isTileAvailable: IIsTileAvailable = (layer: Array<number>): boolean => {
-  let available = layer.length > 0
+  let available = true
   layer.forEach(tileId => {
     let tile = getTileById(tileId)
     if (tile) {
@@ -30,7 +30,7 @@ export const isTileAvailable: IIsTileAvailable = (layer: Array<number>): boolean
 }
 
 export const isTileExplosivable: IIsTileExplosivable = (layer: Array<number>): boolean => {
-  let explosivable = layer.length > 0
+  let explosivable = true
   layer.forEach(tileId => {
     let tile = getTileById(tileId)
     //TODO bomba precisa não ser atravessável e precisa ser acionada pela explosão
@@ -60,11 +60,11 @@ export const isTileDestructive: IIsTileDestructive = (layer: Array<number>): boo
 }
 
 export const getLayer: IGetLayer = (pos: IPosition): Array<number> => {
-  let tilesX = game.scenario[pos.x]
-  if (tilesX) {
-    let tilesY = game.scenario[pos.x][pos.y]
-    if (tilesY) {
-      return tilesY
+  let tilesY = game.scenario[pos.y]
+  if (tilesY) {
+    let tilesX = game.scenario[pos.y][pos.x]
+    if (tilesX) {
+      return tilesX
     }
   }
   return []

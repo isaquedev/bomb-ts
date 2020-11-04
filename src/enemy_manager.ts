@@ -2,6 +2,7 @@ import game from "./game.js"
 import tilesConfig from "./tiles_config.js"
 import { arrayContains } from "./utils.js"
 import EnemySimpleMove from './enemy_simple_move.js';
+import EnemyNestedMove from "./enemy_nested_move.js";
 
 const enemyManager: IEnemyManager = {
   enemies: [],
@@ -15,8 +16,8 @@ const enemyManager: IEnemyManager = {
       if (arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
         enemy = new EnemySimpleMove()
       }
-      if (arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
-        
+      if (arrayContains<number>(coordinate, tilesConfig.tiles.enemyNestedMove.id)) {
+        enemy = new EnemyNestedMove()
       }
       if (enemy) {
         enemy.start(pos)
@@ -24,8 +25,8 @@ const enemyManager: IEnemyManager = {
       }
     })
   },
-  getEnemy: (pos: IPosition) => {
-    return enemyManager.enemies.find(enemy => enemy.position.x === pos.x && enemy.position.y === pos.y)
+  getEnemy: (pos: IPosition, tileId: number) => {
+    return enemyManager.enemies.find(enemy => enemy.id === tileId && enemy.position.x === pos.x && enemy.position.y === pos.y)
   },
   update: () => {
     if (enemyManager.enemies.length === 0) {
@@ -37,17 +38,12 @@ const enemyManager: IEnemyManager = {
     enemyManager.skip = !enemyManager.skip;
     enemyManager.enemies.forEach(enemy => enemy.update(enemyManager.skip))
   },
-  damage: (pos: IPosition) => {
-    let remove:Array<IBaseEnemy> = []
-    enemyManager.enemies.forEach(enemy => {
-      if (enemy.position.x === pos.x && enemy.position.y === pos.y) {
-        enemy.damage()
-        if (enemy.hp == 0) {
-          remove.push(enemy)
-        }
-      }
-    })
-    enemyManager.enemies = enemyManager.enemies.filter(enemy => !arrayContains<IBaseEnemy>(remove, enemy))
+  damage: (enemy: IBaseEnemy) => {
+    enemy.damage()
+    if (enemy.hp === 0) {
+      let index = enemyManager.enemies.indexOf(enemy)
+      enemyManager.enemies.splice(index, 1)
+    }
   }
 }
 

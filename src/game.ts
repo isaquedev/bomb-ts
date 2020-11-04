@@ -37,24 +37,28 @@ const game: IGame = {
         let coordinate = game.getCoordinate(pos)
         for (let z = 0; z < coordinate.length; z++) {
           let tile = getTileById(coordinate[z])
-          if (tile === tilesConfig.tiles.enemySimpleMove) {
-            let enemy = enemyManager.getEnemy(pos)
+          if (tile.isEnemy) {
+            let enemy = enemyManager.getEnemy(pos, tile.id)
             if (enemy) {
               tile.color = enemy.color
+            }
+            if (arrayContains<number>(coordinate, tilesConfig.tiles.explosion.id)) {
+              enemyManager.damage(enemy)
+            }
+          } else if (tile.isPlayer) {
+            let enemy = game.getCoordinate(pos).find(id => {
+              let tile = getTileById(id)
+              return tile.isEnemy
+            })
+            if (arrayContains<number>(coordinate, tilesConfig.tiles.explosion.id) || enemy) {
+              player.damage()
             }
           }
           game.drawTile(pos, tile)
         }
-        if (arrayContains<number>(coordinate, tilesConfig.tiles.explosion.id)) {
-          if (arrayContains<number>(coordinate, tilesConfig.tiles.player.id)) {
-            player.damage()
-          }
-          if (arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
-            enemyManager.damage(pos)
-          }
-        }
-        if (arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
-          if (arrayContains<number>(coordinate, tilesConfig.tiles.player.id)) {
+        if (arrayContains<number>(coordinate, tilesConfig.tiles.player.id)) {
+          if (arrayContains<number>(coordinate, tilesConfig.tiles.explosion.id)
+              || arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
             player.damage()
           }
         }

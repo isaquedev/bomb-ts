@@ -44,6 +44,7 @@ interface ITile extends ITileKeys {
   bomb: ITileItem;
   explosion: ITileItem;
   enemySimpleMove: ITileItem;
+  enemyNestedMove: ITileItem;
 }
 
 interface ITileItem {
@@ -53,6 +54,8 @@ interface ITileItem {
   size: number;
   physics: boolean;
   explosivable: boolean;
+  isPlayer: boolean;
+  isEnemy: boolean;
 }
 
 //bombs.ts
@@ -150,9 +153,9 @@ interface IEnemyManager {
   damage: IEnemyManagerDamage
 }
 
-interface IEnemyManagerGetEnemy { (pos: IPosition): IBaseEnemy }
+interface IEnemyManagerGetEnemy { (pos: IPosition, tileId: number): IBaseEnemy }
 
-interface IEnemyManagerDamage { (pos: IPosition): void }
+interface IEnemyManagerDamage { (enemy: IBaseEnemy): void }
 
 //utils.ts
 interface IGetTileById { (tileId: number): ITileItem }

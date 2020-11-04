@@ -5,7 +5,7 @@ import { isTileAvailable } from "./utils.js";
 
 abstract class BaseEnemy implements IBaseEnemy {
   public id = 0;
-  public hp = 3;
+  public hp = 1;
   public position: IPosition;
   public direction: IPosition = {x: 0, y: 0}
   public isInvulnerable = false;
@@ -25,6 +25,12 @@ abstract class BaseEnemy implements IBaseEnemy {
   protected abstract setId(): void
 
   public update(skipFrame: boolean) {
+    if (this.hp === 0) {
+      this.shine = false;
+      this.color = this.colors.default
+      return;
+    }
+
     if (this.isInvulnerable) {
       this.shine = !this.shine;
     } else {
@@ -39,24 +45,69 @@ abstract class BaseEnemy implements IBaseEnemy {
   }
 
   protected findDirection() {
-    if (isTileAvailable(game.getCoordinate({x: this.position.x - 1, y: this.position.y}))) {
-      this.direction = {x: -1, y: 0}
-      return;
+    let moveHorizontaly = Math.round(Math.random()) == 1
+
+    if (moveHorizontaly) {
+      let direction = this.findHorizontalyDirection()
+      if (direction) {
+        this.direction = direction;
+      } else {
+        direction = this.findVerticalyDirection()
+        if (direction) {
+          this.direction = direction
+        }
+      }
+    } else {
+      let direction = this.findVerticalyDirection()
+      if (direction) {
+        this.direction = direction
+      } else {
+        direction = this.findHorizontalyDirection()
+        if (direction) {
+          this.direction = direction
+        }
+      }
+    }
+  }
+
+  private findHorizontalyDirection(): IPosition {
+    let checkLeftFirst = Math.round(Math.random()) == 1
+
+    if (checkLeftFirst) {
+      if (isTileAvailable(game.getCoordinate({x: this.position.x - 1, y: this.position.y}))) {
+        return this.direction = {x: -1, y: 0}
+      } else if (isTileAvailable(game.getCoordinate({x: this.position.x + 1, y: this.position.y}))) {
+        return this.direction = {x: 1, y: 0}
+      }
+    } else {
+      if (isTileAvailable(game.getCoordinate({x: this.position.x + 1, y: this.position.y}))) {
+        return this.direction = {x: 1, y: 0}
+      } else if (isTileAvailable(game.getCoordinate({x: this.position.x - 1, y: this.position.y}))) {
+        return this.direction = {x: -1, y: 0}
+      }
     }
 
-    if (isTileAvailable(game.getCoordinate({x: this.position.x + 1, y: this.position.y}))) {
-      this.direction = {x: 1, y: 0}
-      return;
+    return undefined
+  }
+
+  private findVerticalyDirection(): IPosition {
+    let checkTopFirst = Math.round(Math.random()) == 1
+
+    if (checkTopFirst) {
+      if (isTileAvailable(game.getCoordinate({x: this.position.x, y: this.position.y - 1}))) {
+        return this.direction = {x: 0, y: -1}
+      } else if (isTileAvailable(game.getCoordinate({x: this.position.x, y: this.position.y + 1}))) {
+        return this.direction = {x: 0, y: 1}
+      }
+    } else {
+      if (isTileAvailable(game.getCoordinate({x: this.position.x, y: this.position.y + 1}))) {
+        return this.direction = {x: 0, y: 1}
+      } else if (isTileAvailable(game.getCoordinate({x: this.position.x, y: this.position.y - 1}))) {
+        return this.direction = {x: 0, y: -1}
+      }
     }
 
-    if (isTileAvailable(game.getCoordinate({x: this.position.x, y: this.position.y - 1}))) {
-      this.direction = {x: 0, y: -1}
-      return;
-    }
-
-    if (isTileAvailable(game.getCoordinate({x: this.position.x, y: this.position.y + 1}))) {
-      this.direction = {x: 0, y: 1}
-    }
+    return undefined
   }
 
   protected abstract moveEnemy(): void;
@@ -65,7 +116,7 @@ abstract class BaseEnemy implements IBaseEnemy {
     let enemyIndex = game.getCoordinate(this.position).indexOf(this.id)
     game.getCoordinate(this.position).splice(enemyIndex, 1)
     this.position = pos
-    game.getCoordinate(this.position).push(this.id)
+    game.getCoordinate(this.position).splice(0, 0, this.id)
   }
 
   protected generateNewPos(): IPosition {
@@ -81,15 +132,13 @@ abstract class BaseEnemy implements IBaseEnemy {
 
   public damage() {
     if (this.isInvulnerable) return;
-
-    //TODO animate enemy death
     this.hp -= 1;
-    if (this.hp > 1) {
+    if (this.hp > 0) {
       this.isInvulnerable = true;
       setTimeout(() => this.isInvulnerable = false, times.playerInvulnerability)
     } else {
-      let enemyId = tilesConfig.tiles.enemySimpleMove.id
-      let enemyIndex = game.getCoordinate(this.position).indexOf(enemyId)
+      //TODO enemy death animation
+      let enemyIndex = game.getCoordinate(this.position).indexOf(this.id)
       game.getCoordinate(this.position).splice(enemyIndex, 1)
     }
   }

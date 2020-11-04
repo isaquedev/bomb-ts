@@ -6,7 +6,7 @@ import { isTileAvailable } from "./utils.js";
 class EnemySimpleMove extends BaseEnemy {
 
   protected startEnemy(): void {
-    
+    this.hp = 1
   }
 
   protected setId() {

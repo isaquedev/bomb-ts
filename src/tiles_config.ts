@@ -8,6 +8,8 @@ const tilesConfig: ITileConfig = {
       size: 48,
       physics: false,
       explosivable: false,
+      isPlayer: false,
+      isEnemy: false,
     },
     player: {
       id: 1,
@@ -15,7 +17,9 @@ const tilesConfig: ITileConfig = {
       color: 'blue',
       size: 30,
       physics: false,
-      explosivable: false
+      explosivable: false,
+      isPlayer: true,
+      isEnemy: false,
     },
     wall: {
       id: 2,
@@ -23,7 +27,9 @@ const tilesConfig: ITileConfig = {
       color: 'purple',
       size: 48,
       physics: true,
-      explosivable: false
+      explosivable: false,
+      isPlayer: false,
+      isEnemy: false,
     },
     box: {
       id: 3,
@@ -31,7 +37,9 @@ const tilesConfig: ITileConfig = {
       color: 'grey',
       size: 36,
       physics: true,
-      explosivable: true
+      explosivable: true,
+      isPlayer: false,
+      isEnemy: false,
     },
     bomb: {
       id: 4,
@@ -39,7 +47,9 @@ const tilesConfig: ITileConfig = {
       color: 'yellow',
       size: 40,
       physics: true,
-      explosivable: false
+      explosivable: false,
+      isPlayer: false,
+      isEnemy: false,
     },
     explosion: {
       id: 5,
@@ -47,7 +57,9 @@ const tilesConfig: ITileConfig = {
       color: 'orange',
       size: 40,
       physics: false,
-      explosivable: false
+      explosivable: false,
+      isPlayer: false,
+      isEnemy: false,
     },
     enemySimpleMove: {
       id: 6,
@@ -55,7 +67,19 @@ const tilesConfig: ITileConfig = {
       color: 'red',
       size: 40,
       physics: false,
-      explosivable: false
+      explosivable: false,
+      isPlayer: false,
+      isEnemy: true,
+    },
+    enemyNestedMove: {
+      id: 7,
+      name: 'enemy-nested-move',
+      color: 'Teal',
+      size: 40,
+      physics: false,
+      explosivable: false,
+      isPlayer: false,
+      isEnemy: true
     }
   }
 }

@@ -43,14 +43,13 @@ const player: IPlayer = {
     if (player.isInvulnerable || player.dead) return;
 
     if (player.hp > 1) {
-      //TODO damage animation
       player.hp -= 1;
       player.isInvulnerable = true
 
       setTimeout(() => player.isInvulnerable = false, times.playerInvulnerability)
     } else {
+      //TODO player death state
       alert('player dead')
-      //TODO death animation
       player.dead = true
 
       game.reset()

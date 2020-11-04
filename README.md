@@ -3,13 +3,12 @@
 by Isaque Hernandes
 
 ## How to setup
-Install typescript if you don't have:
+First install dependencies running:
 
-```npm install -g typescript``` 
+```npm install``` 
 
+To run the app, use `npm start`. This command generate JS files and run the server.
 
-Run the typescript config file to generate the javascript files:
+To develop I recommend these two scripts:
 
-`tsc --project tsconfig.json`
-
-The project use javascript modules to separate the code in diferent files. Because of that to run the code locally it's necessary to create a local server. To do there are some libs like [http-server](https://github.com/http-party/http-server) or [live-server](https://github.com/tapio/live-server).
+`npm run server` to start the server and `npm run watch-ts` to watch changes in TS files and rebuild JS files.

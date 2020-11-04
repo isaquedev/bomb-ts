@@ -21,31 +21,23 @@ class EnemySimpleMove {
   }
 
   private findDirection() {
-    let pos = {x: this.position.x, y: this.position.y}
-
-    pos.x = this.position.x - 1
-    if (isTileAvailable(game.getCoordinate(pos))) {
+    if (isTileAvailable(game.getCoordinate({x: this.position.x - 1, y: this.position.y}))) {
       this.direction = {x: -1, y: 0}
       return;
     }
 
-    pos.x = this.position.x + 1;
-    if (isTileAvailable(game.getCoordinate(pos))) {
+    if (isTileAvailable(game.getCoordinate({x: this.position.x + 1, y: this.position.y}))) {
       this.direction = {x: 1, y: 0}
       return;
     }
 
-    pos.x = this.position.x
-    pos.y = this.position.y - 1
-    if (isTileAvailable(game.getCoordinate(pos))) {
+    if (isTileAvailable(game.getCoordinate({x: this.position.x, y: this.position.y - 1}))) {
       this.direction = {x: 0, y: -1}
       return;
     }
 
-    pos.y = this.position.y + 1;
-    if (isTileAvailable(game.getCoordinate(pos))) {
+    if (isTileAvailable(game.getCoordinate({x: this.position.x, y: this.position.y + 1}))) {
       this.direction = {x: 0, y: 1}
-      return;
     }
   }
 

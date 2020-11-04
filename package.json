@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc --project tsconfig.json & node server.js",
-    "build": "tsc --project tsconfig.json"
+    "server": "node server.js",
+    "watch-ts": "tsc --project tsconfig.json -w"
   },
   "repository": {
     "type": "git",

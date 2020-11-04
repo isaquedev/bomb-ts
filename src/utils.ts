@@ -70,6 +70,6 @@ export const getLayer: IGetLayer = (pos: IPosition): Array<number> => {
   return []
 }
 
-export const arrayContains: IArrayContains = (array: Array<any>, value: any): boolean => {
+export const arrayContains: IArrayContains = <T>(array: Array<T>, value: T): boolean => {
   return array.indexOf(value) !== -1;
 }

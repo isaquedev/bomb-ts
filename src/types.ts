@@ -4,15 +4,6 @@ interface IPosition {
   y: number
 }
 
-//bombers files
-interface IBomber {
-  hp: number;
-  dead: boolean;
-  isInvulnerable: boolean;
-  bombPower: number;
-  bombCount: number
-}
-
 //game.ts
 interface IGame {
   context: CanvasRenderingContext2D;
@@ -72,15 +63,37 @@ interface IBomb {
   timeOut: number;
 }
 
-//player.ts
-interface IPlayer {
-  bomber: IBomber;
+//live object
+interface ILiveObject {
+  params: ILiveObjectParams;
+  methods: ILiveObjectMethods;
+}
+
+interface ILiveObjectParams {
+  hp: number;
+  dead: boolean;
+  isInvulnerable: boolean;
+  position: IPosition;
+}
+
+interface ILiveObjectMethods {
   start: Function;
   update: Function;
   damage: Function;
-  position: IPosition;
   move: Function;
-  leaveBomb: Function,
+}
+
+//bombers files
+interface IBomber {
+  bombPower: number;
+  bombCount: number
+}
+
+//player.ts
+interface IPlayer {
+  object: ILiveObject;
+  bomber: IBomber;
+  leaveBomb: Function;
   actions: IPlayerActions;
 }
 
@@ -117,7 +130,7 @@ interface IIsTileDestructive { (layer: Array<number>): boolean }
 
 interface IGetLayer { (pos: IPosition): Array<number> }
 
-interface IArrayContains { (array: Array<any>, value: any): boolean }
+interface IArrayContains { <T>(array: Array<T>, value: T): boolean }
 
 //times.ts
 interface ITimes {

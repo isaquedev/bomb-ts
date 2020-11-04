@@ -13,7 +13,7 @@ const game: IGame = {
     canvas.width = game.scenario.length * tilesConfig.tileSize;
     canvas.height = game.scenario[0].length * tilesConfig.tileSize;
 
-    player.start()
+    player.object.methods.start()
 
     game.update()
     setInterval(game.update, 100)
@@ -33,11 +33,11 @@ const game: IGame = {
           game.context.fillRect(posX, posY, size, size);
         }
         if (arrayContains(game.scenario[x][y], tilesConfig.tiles.player.id) && arrayContains(game.scenario[x][y], tilesConfig.tiles.explosion.id)) {
-          player.damage()
+          player.object.methods.damage()
         }
       }
     }
-    player.update()
+    player.object.methods.update()
   }
 }
 

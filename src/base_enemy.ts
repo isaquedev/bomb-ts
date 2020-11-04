@@ -76,7 +76,7 @@ abstract class BaseEnemy implements IBaseEnemy {
   }
 
   protected hasValidDirection(): boolean {
-    return this.direction.x !== 0 && this.direction.y !== 0;
+    return this.direction.x !== 0 || this.direction.y !== 0;
   }
 
   public damage() {

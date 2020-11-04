@@ -1,0 +1,31 @@
+{
+  "name": "bomber_ts",
+  "version": "1.0.0",
+  "description": "A simple bomberman game in typescript",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc --project tsconfig.json & node server.js",
+    "build": "tsc --project tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaquedev/bomb-ts.git"
+  },
+  "keywords": [
+    "bomberman",
+    "typescript",
+    "ts",
+    "bomber",
+    "game"
+  ],
+  "author": "Isaque Hernandes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/isaquedev/bomb-ts/issues"
+  },
+  "homepage": "https://github.com/isaquedev/bomb-ts#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "typescript": "^4.0.5"
+  }
+}

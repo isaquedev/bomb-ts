@@ -104,7 +104,7 @@ const player: IPlayer = {
         timeOut: setTimeout(() => bombManager.explode(bombId), times.bombDelayToExplode)
       })
 
-      layer.splice(1, 0, bomb.id)
+      layer.splice(0, 0, bomb.id)
     }
   },
   actions: {

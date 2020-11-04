@@ -1,5 +1,5 @@
 import game from "./game.js"
-import { isTileAvailable } from './utils.js';
+import { arrayContains, isTileAvailable } from './utils.js';
 import tilesConfig from './tiles_config.js';
 import bombManager from './bombs.js';
 import times from './times.js';
@@ -26,8 +26,11 @@ const player: IPlayer = {
             player.actions.status[action.name] = false
           }
         });
+        player.reset()
       },
       update: () => {
+        if (player.object.params.dead) return;
+
         player.object.methods.move()
         player.leaveBomb()
       },
@@ -38,12 +41,11 @@ const player: IPlayer = {
           //TODO damage animation
           player.object.params.hp -= 1;
           player.object.params.isInvulnerable = true
-          setTimeout(() => player.object.params.isInvulnerable = false, times.playerInvulnerability)
-          console.log('damage')
         } else {
           //TODO death animation
           player.object.params.dead = true
-          alert('Player dead')
+
+          game.reset()
         }
       },
       move: () => {
@@ -69,6 +71,14 @@ const player: IPlayer = {
         }
       }
     }
+  },
+  reset: () => {
+    player.object.params.dead = false
+    game.forCoordinates(pos => {
+      if (arrayContains<number>(game.getCoordinate(pos), tilesConfig.tiles.player.id)) {
+        player.object.params.position = pos
+      }
+    })
   },
   bomber: {
     bombPower: 2,

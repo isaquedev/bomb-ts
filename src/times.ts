@@ -1,7 +1,7 @@
 const times: ITimes = {
-  playerInvulnerability: 1001,
+  playerInvulnerability: 751,
   bombDelayToExplode: 1500,
-  explosionDuration: 1000
+  explosionDuration: 750
 }
 
 export default times

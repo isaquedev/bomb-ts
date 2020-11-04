@@ -1,29 +1,56 @@
+import game from "./game.js"
+import tilesConfig from "./tiles_config.js"
+import { arrayContains } from "./utils.js"
+import EnemySimpleMove from './enemy_simple_move.js';
+
 interface IEnemyManager {
-  enemies: Array<IEnemy>;
-  start: IEnemyStart;
+  enemies: Array<EnemySimpleMove>;
+  skip: boolean;
+  start: Function;
   update: Function;
+  damage: IEnemyManagerDamage
 }
 
-interface IEnemy {
-  object: ILiveObject;
-  start: IEnemyFunction;
-  update: IEnemyFunction;
-  move: IEnemyFunction;
-  damage: IEnemyFunction;
-}
-
-interface IEnemyFunction { (enemy: ILiveObject): void }
-
-interface IEnemyStart { (pos: IPosition): void }
+interface IEnemyManagerDamage { (pos: IPosition): void }
 
 const enemyManager: IEnemyManager = {
   enemies: [],
-  start: (pos: IPosition) => {
-    
+  skip: false,
+  start: () => {
+    enemyManager.enemies = []
+
+    game.forCoordinates(pos => {
+      let coordinate = game.getCoordinate(pos)
+      if (arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
+        let enemy = new EnemySimpleMove()
+        enemy.start(pos)
+        enemyManager.enemies.push(enemy)
+      }
+    })
   },
   update: () => {
+    if (enemyManager.enemies.length === 0) {
+      game.reset()
+      return;
+    }
 
+    if (enemyManager.skip) {
+      enemyManager.skip = false;
+      return;
+    }
+    enemyManager.enemies.forEach(enemy => enemy.update())
+    enemyManager.skip = true;
   },
+  damage: (pos: IPosition) => {
+    let remove:Array<EnemySimpleMove> = []
+    enemyManager.enemies.forEach(enemy => {
+      if (enemy.position.x === pos.x && enemy.position.y === pos.y) {
+        enemy.damage()
+        remove.push(enemy)
+      }
+    })
+    enemyManager.enemies = enemyManager.enemies.filter(enemy => !arrayContains<EnemySimpleMove>(remove, enemy))
+  }
 }
 
 export default enemyManager

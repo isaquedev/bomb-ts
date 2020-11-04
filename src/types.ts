@@ -7,9 +7,13 @@ interface IPosition {
 //game.ts
 interface IGame {
   context: CanvasRenderingContext2D;
+  updaterId: number;
+  reseting: boolean;
   getCoordinate: IGameCoordinate;
+  forCoordinates: IGameForCoordinates;
   start: Function;
   update: Function;
+  reset: Function;
   drawTile: IGameTile;
   scenario: Array<Array<Array<number>>>;
 }
@@ -17,6 +21,10 @@ interface IGame {
 interface IGameTile { (pos: IPosition, tile: ITileItem): void }
 
 interface IGameCoordinate { (pos: IPosition): Array<number> }
+
+interface IGameForCoordinates { (doOnCoordinate: IPositionFunction): void }
+
+interface IPositionFunction { (pos: IPosition): void }
 
 //tiles_config.ts
 interface ITileConfig {
@@ -35,6 +43,7 @@ interface ITile extends ITileKeys {
   box: ITileItem;
   bomb: ITileItem;
   explosion: ITileItem;
+  enemySimpleMove: ITileItem;
 }
 
 interface ITileItem {
@@ -49,6 +58,9 @@ interface ITileItem {
 //bombs.ts
 interface IBombManager {
   bombs: Array<IBomb>;
+  explosion: Array<IPosition>;
+  explosionIds: Array<number>;
+  reset: Function;
   explode: IBombManagerExplode;
   clean: IBombManagerClean;
 }
@@ -100,6 +112,7 @@ interface IPlayer {
   object: ILiveObject;
   bomber: IBomber;
   leaveBomb: Function;
+  reset: Function;
   actions: IPlayerActions;
 }
 

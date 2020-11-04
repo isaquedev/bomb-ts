@@ -2,7 +2,7 @@ import tilesConfig from './tiles_config.js';
 import { fase1 } from './scenarios.js';
 import player from './player.js';
 import { getTileById, arrayContains } from './utils.js'
-import enemyManager from './enemy.js';
+import enemyManager from './enemy_manager.js';
 import bombManager from './bombs.js';
 
 const game: IGame = {
@@ -27,7 +27,7 @@ const game: IGame = {
     canvas.width = game.scenario[0].length * tilesConfig.tileSize;
     canvas.height = game.scenario.length * tilesConfig.tileSize;
 
-    player.object.methods.start()
+    player.start()
   },
   update: () => {
     if (game.reseting) return;
@@ -37,11 +37,17 @@ const game: IGame = {
         let coordinate = game.getCoordinate(pos)
         for (let z = 0; z < coordinate.length; z++) {
           let tile = getTileById(coordinate[z])
+          if (tile === tilesConfig.tiles.enemySimpleMove) {
+            let enemy = enemyManager.getEnemy(pos)
+            if (enemy) {
+              tile.color = enemy.color
+            }
+          }
           game.drawTile(pos, tile)
         }
         if (arrayContains<number>(coordinate, tilesConfig.tiles.explosion.id)) {
           if (arrayContains<number>(coordinate, tilesConfig.tiles.player.id)) {
-            player.object.methods.damage()
+            player.damage()
           }
           if (arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
             enemyManager.damage(pos)
@@ -49,12 +55,12 @@ const game: IGame = {
         }
         if (arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
           if (arrayContains<number>(coordinate, tilesConfig.tiles.player.id)) {
-            player.object.methods.damage()
+            player.damage()
           }
         }
     })
 
-    player.object.methods.update()
+    player.update()
     enemyManager.update()
   },
   reset: () => {
@@ -62,10 +68,10 @@ const game: IGame = {
     clearInterval(game.updaterId)
 
     bombManager.reset()
-    player.reset()
 
     game.scenario = JSON.parse(JSON.stringify(fase1))
 
+    player.reset()
     enemyManager.start()
 
     game.updaterId = setInterval(game.update, 100)

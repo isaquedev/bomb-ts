@@ -81,26 +81,6 @@ interface IBomb {
   timeOut: number;
 }
 
-//live object
-interface ILiveObject {
-  params: ILiveObjectParams;
-  methods: ILiveObjectMethods;
-}
-
-interface ILiveObjectParams {
-  hp: number;
-  dead: boolean;
-  isInvulnerable: boolean;
-  position: IPosition;
-}
-
-interface ILiveObjectMethods {
-  start: Function;
-  update: Function;
-  damage: Function;
-  move: Function;
-}
-
 //bombers files
 interface IBomber {
   bombPower: number;
@@ -109,7 +89,15 @@ interface IBomber {
 
 //player.ts
 interface IPlayer {
-  object: ILiveObject;
+  hp: number;
+  dead: boolean;
+  isInvulnerable: boolean;
+  shine: boolean;
+  position: IPosition;
+  start: Function;
+  update: Function;
+  damage: Function;
+  move: Function;
   bomber: IBomber;
   leaveBomb: Function;
   reset: Function;
@@ -137,6 +125,34 @@ interface IPlayerActionStatus extends IPlayerActionStatusKey {
   moveBot: boolean;
   leaveBomb: boolean;
 }
+
+//enemyManager.ts
+
+interface IBaseEnemy {
+  id: number;
+  hp: number;
+  position: IPosition;
+  direction: IPosition;
+  isInvulnerable: boolean;
+  shine: boolean
+  color: string
+  start: Function;
+  update: Function;
+  damage: Function;
+}
+
+interface IEnemyManager {
+  enemies: Array<IBaseEnemy>;
+  getEnemy: IEnemyManagerGetEnemy;
+  skip: boolean;
+  start: Function;
+  update: Function;
+  damage: IEnemyManagerDamage
+}
+
+interface IEnemyManagerGetEnemy { (pos: IPosition): IBaseEnemy }
+
+interface IEnemyManagerDamage { (pos: IPosition): void }
 
 //utils.ts
 interface IGetTileById { (tileId: number): ITileItem }

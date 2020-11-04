@@ -30,6 +30,7 @@ const enemyManager: IEnemyManager = {
   },
   update: () => {
     if (enemyManager.enemies.length === 0) {
+      alert('you win')
       game.reset()
       return;
     }

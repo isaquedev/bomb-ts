@@ -42,6 +42,7 @@ const player: IPlayer = {
           player.object.params.hp -= 1;
           player.object.params.isInvulnerable = true
         } else {
+          alert('player dead')
           //TODO death animation
           player.object.params.dead = true
 

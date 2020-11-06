@@ -1,7 +1,7 @@
 import BaseEnemy from "./base_enemy.js";
-import game from "./game.js";
-import tiles from "./tiles.js";
-import { isTileAvailable } from "./utils.js";
+import game from "../game/game.js";
+import tiles from "../game/tiles.js";
+import { isTileAvailable } from "../utils/utils.js";
 
 class EnemyNestedMove extends BaseEnemy {
 

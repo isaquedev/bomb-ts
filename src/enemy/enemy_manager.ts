@@ -1,6 +1,6 @@
-import game from "./game.js"
-import tiles from "./tiles.js"
-import { arrayContains } from "./utils.js"
+import game from "../game/game.js"
+import tiles from "../game/tiles.js"
+import { arrayContains } from "../utils/utils.js"
 import EnemySimpleMove from './enemy_simple_move.js';
 import EnemyNestedMove from "./enemy_nested_move.js";
 

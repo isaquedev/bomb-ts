@@ -1,10 +1,10 @@
 import tiles from './tiles.js';
 import { fase1 } from './scenarios.js';
-import player from './player.js';
-import { getTileById, arrayContains } from './utils.js'
-import enemyManager from './enemy_manager.js';
-import bombManager from './bombs.js';
-import { tileSize } from './physics.js'
+import player from '../player/player.js';
+import { getTileById, arrayContains } from '../utils/utils.js'
+import enemyManager from '../enemy/enemy_manager.js';
+import bombManager from '../player/bombs.js';
+import { tileSize } from '../utils/physics.js'
 
 const game: IGame = {
   context: null,

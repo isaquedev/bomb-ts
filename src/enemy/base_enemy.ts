@@ -1,6 +1,6 @@
-import game from "./game.js";
-import times from "./times.js";
-import { isTileAvailable } from "./utils.js";
+import game from "../game/game.js";
+import times from "../utils/times.js";
+import { isTileAvailable } from "../utils/utils.js";
 
 abstract class BaseEnemy implements IBaseEnemy {
   public id = 0;

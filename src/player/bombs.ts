@@ -1,8 +1,8 @@
-import game from "./game.js"
+import game from "../game/game.js"
 import player from "./player.js"
-import tiles from "./tiles.js"
-import { getLayer, isTileExplosivable, isTileDestructive, arrayContains } from './utils.js'
-import times from './times.js';
+import tiles from "../game/tiles.js"
+import { getLayer, isTileExplosivable, isTileDestructive, arrayContains } from '../utils/utils.js'
+import times from '../utils/times.js';
 
 const bombManager: IBombManager = {
   bombs: [],

@@ -1,9 +1,9 @@
-import game from "./game.js"
-import { arrayContains } from './utils.js';
-import tiles from './tiles.js';
+import game from "../game/game.js"
+import { arrayContains } from '../utils/utils.js';
+import tiles from '../game/tiles.js';
 import bombManager from './bombs.js';
-import times from './times.js';
-import { tileSize, tileHalfSize, physicMove } from './physics.js'
+import times from '../utils/times.js';
+import { tileSize, tileHalfSize, physicMove } from '../utils/physics.js'
 
 class Player implements IPlayer {
   public position: IPosition = {x: 1, y: 1}

@@ -1,4 +1,4 @@
-import game from "./game.js";
+import game from "../game/game.js";
 import { isTileAvailable } from "./utils.js";
 
 export const tileHalfSize = 3;

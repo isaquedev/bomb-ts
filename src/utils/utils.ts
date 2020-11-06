@@ -1,5 +1,5 @@
-import game from "./game.js"
-import tiles from './tiles.js';
+import game from "../game/game.js"
+import tiles from '../game/tiles.js';
 
 export const getTileById: IGetTileById = (tileId: number): ITileItem => {
   let tile: ITileItem;

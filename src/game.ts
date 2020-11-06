@@ -45,7 +45,7 @@ const game: IGame = {
         if (tile.isEnemy) {
           let enemy = enemyManager.getEnemy(pos, tile.id)
           if (enemy) {
-            tile.color = enemy.color
+            // tile.color = enemy.color
           }
           if (arrayContains<number>(coordinate, tiles.explosion.id)) {
             enemyManager.damage(enemy)
@@ -58,8 +58,8 @@ const game: IGame = {
           if (arrayContains<number>(coordinate, tiles.explosion.id) || enemy) {
             player.damage()
           }
-          game.drawSprite(player.absolutePosition, player.sprite)
-          continue;
+          game.drawSprite(player.absolutePosition, tiles.player.sprite)
+          continue
         }
         game.drawTile(pos, tile)
       }
@@ -92,12 +92,11 @@ const game: IGame = {
     let posX = pos.x * tileSize
     let posY = pos.y * tileSize
 
-    game.context.fillStyle = tile.color
-    game.context.fillRect(posX, posY, tileSize, tileSize);
+    game.drawSprite({x: posX, y: posY}, tile.sprite)
   },
   drawSprite: (pos: IPosition, sprite: string) => {
     let image = new Image()
-    image.src = sprite
+    image.src = "./resources/images/" + sprite + ".png"
     game.context.drawImage(image, pos.x, pos.y, tileSize, tileSize)
   }
 }

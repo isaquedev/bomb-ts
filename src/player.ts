@@ -9,7 +9,6 @@ class Player implements IPlayer {
   public position: IPosition = {x: 1, y: 1}
   public absolutePosition: IPosition = {x: 0, y: 0}
   public bomber: IBomber = {bombPower: 2, bombCount: 3}
-  public sprite: string = '../resources/images/player.png'
 
   private skip = false;
   private hp = 1
@@ -61,7 +60,7 @@ class Player implements IPlayer {
       this.shine = false
     }
 
-    tiles.player.color = this.shine ? "LightCyan" : "blue"
+    // tiles.player.color = this.shine ? "LightCyan" : "blue"
 
     this.move()
     this.leaveBomb()

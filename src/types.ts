@@ -59,8 +59,7 @@ interface ITile extends ITileKeys {
 
 interface ITileItem {
   id: number;
-  name: string;
-  color: string;
+  sprite: string;
   physics: boolean;
   explosivable: boolean;
   isPlayer: boolean;
@@ -103,7 +102,6 @@ interface IBomber {
 interface IPlayer {
   position: IPosition;
   absolutePosition: IPosition;
-  sprite: string;
   start: Function;
   update: Function;
   damage: Function;

@@ -1,8 +1,7 @@
 const tiles: ITile = {
   ground :{
     id: 0,
-    name: 'ground',
-    color: 'black',
+    sprite: 'grass',
     physics: false,
     explosivable: false,
     isPlayer: false,
@@ -10,8 +9,7 @@ const tiles: ITile = {
   },
   player: {
     id: 1,
-    name: 'player',
-    color: 'blue',
+    sprite: 'player',
     physics: false,
     explosivable: false,
     isPlayer: true,
@@ -19,8 +17,7 @@ const tiles: ITile = {
   },
   wall: {
     id: 2,
-    name: 'wall',
-    color: 'purple',
+    sprite: 'wall',
     physics: true,
     explosivable: false,
     isPlayer: false,
@@ -28,8 +25,7 @@ const tiles: ITile = {
   },
   box: {
     id: 3,
-    name: 'box',
-    color: 'grey',
+    sprite: 'box',
     physics: true,
     explosivable: true,
     isPlayer: false,
@@ -37,8 +33,7 @@ const tiles: ITile = {
   },
   bomb: {
     id: 4,
-    name: 'bomb',
-    color: 'yellow',
+    sprite: 'bomb',
     physics: true,
     explosivable: false,
     isPlayer: false,
@@ -46,8 +41,7 @@ const tiles: ITile = {
   },
   explosion: {
     id: 5,
-    name: 'explosion',
-    color: 'orange',
+    sprite: 'explosion',
     physics: false,
     explosivable: false,
     isPlayer: false,
@@ -55,8 +49,7 @@ const tiles: ITile = {
   },
   enemySimpleMove: {
     id: 6,
-    name: 'enemy-simple-move',
-    color: 'red',
+    sprite: 'enemy',
     physics: false,
     explosivable: false,
     isPlayer: false,
@@ -64,8 +57,7 @@ const tiles: ITile = {
   },
   enemyNestedMove: {
     id: 7,
-    name: 'enemy-nested-move',
-    color: 'Teal',
+    sprite: 'enemy',
     physics: false,
     explosivable: false,
     isPlayer: false,

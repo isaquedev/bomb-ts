@@ -1,6 +1,6 @@
 import game from "./game.js"
 import player from "./player.js"
-import tilesConfig from "./tiles_config.js"
+import tiles from "./tiles.js"
 import { getLayer, isTileExplosivable, isTileDestructive, arrayContains } from './utils.js'
 import times from './times.js';
 
@@ -19,8 +19,8 @@ const bombManager: IBombManager = {
     //TODO add bombs in bombs array to explode bomb on explosion colid with them
     let explosion: Array<IPosition> = [{x: bomb.x, y: bomb.y}]
 
-    let bombZIndex = game.getCoordinate(bomb).indexOf(tilesConfig.tiles.bomb.id)
-    game.getCoordinate(bomb)[bombZIndex] = tilesConfig.tiles.explosion.id
+    let bombZIndex = game.getCoordinate(bomb).indexOf(tiles.bomb.id)
+    game.getCoordinate(bomb)[bombZIndex] = tiles.explosion.id
     let directions = [
       { active: true, x: -1,  y: 0 },
       { active: true, x: 1,   y: 0 },
@@ -37,8 +37,8 @@ const bombManager: IBombManager = {
           if (isTileExplosivable(layer)) {
             explosion.push(newPos)
             bombManager.explosion.push(newPos)
-            game.getCoordinate(newPos).splice(0, 0, tilesConfig.tiles.explosion.id)
-            if (arrayContains<number>(layer, tilesConfig.tiles.bomb.id)) {
+            game.getCoordinate(newPos).splice(0, 0, tiles.explosion.id)
+            if (arrayContains<number>(layer, tiles.bomb.id)) {
               directions[direction].active = false
               foundedBombs.push(bombManager.bombs.find(bomb => bomb.x == newPos.x && bomb.y == newPos.y))
             } else if (isTileDestructive(layer)) {

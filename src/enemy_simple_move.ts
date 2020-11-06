@@ -1,6 +1,6 @@
 import BaseEnemy from "./base_enemy.js";
 import game from "./game.js";
-import tilesConfig from "./tiles_config.js";
+import tiles from "./tiles.js";
 import { isTileAvailable } from "./utils.js";
 
 class EnemySimpleMove extends BaseEnemy {
@@ -10,7 +10,7 @@ class EnemySimpleMove extends BaseEnemy {
   }
 
   protected setId() {
-    this.id = tilesConfig.tiles.enemySimpleMove.id
+    this.id = tiles.enemySimpleMove.id
   }
   
   protected moveEnemy(): void {

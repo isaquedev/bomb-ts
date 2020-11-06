@@ -1,11 +1,11 @@
 import game from "./game.js"
-import tilesConfig from './tiles_config.js';
+import tiles from './tiles.js';
 
 export const getTileById: IGetTileById = (tileId: number): ITileItem => {
   let tile: ITileItem;
 
-  Object.keys(tilesConfig.tiles).forEach(tileKey => {
-    let tileItem = tilesConfig.tiles[tileKey]
+  Object.keys(tiles).forEach(tileKey => {
+    let tileItem = tiles[tileKey]
     if (tileItem.id === tileId) {
       tile = tileItem
       return;
@@ -35,7 +35,7 @@ export const isTileExplosivable: IIsTileExplosivable = (layer: Array<number>): b
     let tile = getTileById(tileId)
     //TODO bomba precisa não ser atravessável e precisa ser acionada pela explosão
     if (tile) {
-      if (tile.physics && !tile.explosivable && tile.id !== tilesConfig.tiles.bomb.id) {
+      if (tile.physics && !tile.explosivable && tile.id !== tiles.bomb.id) {
         explosivable = false;
         return;
       }

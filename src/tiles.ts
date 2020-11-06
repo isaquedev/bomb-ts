@@ -1,0 +1,76 @@
+const tiles: ITile = {
+  ground :{
+    id: 0,
+    name: 'ground',
+    color: 'black',
+    physics: false,
+    explosivable: false,
+    isPlayer: false,
+    isEnemy: false,
+  },
+  player: {
+    id: 1,
+    name: 'player',
+    color: 'blue',
+    physics: false,
+    explosivable: false,
+    isPlayer: true,
+    isEnemy: false,
+  },
+  wall: {
+    id: 2,
+    name: 'wall',
+    color: 'purple',
+    physics: true,
+    explosivable: false,
+    isPlayer: false,
+    isEnemy: false,
+  },
+  box: {
+    id: 3,
+    name: 'box',
+    color: 'grey',
+    physics: true,
+    explosivable: true,
+    isPlayer: false,
+    isEnemy: false,
+  },
+  bomb: {
+    id: 4,
+    name: 'bomb',
+    color: 'yellow',
+    physics: true,
+    explosivable: false,
+    isPlayer: false,
+    isEnemy: false,
+  },
+  explosion: {
+    id: 5,
+    name: 'explosion',
+    color: 'orange',
+    physics: false,
+    explosivable: false,
+    isPlayer: false,
+    isEnemy: false,
+  },
+  enemySimpleMove: {
+    id: 6,
+    name: 'enemy-simple-move',
+    color: 'red',
+    physics: false,
+    explosivable: false,
+    isPlayer: false,
+    isEnemy: true,
+  },
+  enemyNestedMove: {
+    id: 7,
+    name: 'enemy-nested-move',
+    color: 'Teal',
+    physics: false,
+    explosivable: false,
+    isPlayer: false,
+    isEnemy: true
+  }
+}
+
+export default tiles

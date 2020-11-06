@@ -1,5 +1,4 @@
 import game from "./game.js";
-import tilesConfig from "./tiles_config.js";
 import times from "./times.js";
 import { isTileAvailable } from "./utils.js";
 

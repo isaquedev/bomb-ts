@@ -4,6 +4,12 @@ interface IPosition {
   y: number
 }
 
+interface IPositionMove {
+  absolutePostion: IPosition;
+  coordinatePosition: IPosition;
+  physicalValid: boolean;
+}
+
 //game.ts
 interface IGame {
   context: CanvasRenderingContext2D;
@@ -11,27 +17,31 @@ interface IGame {
   reseting: boolean;
   getCoordinate: IGameCoordinate;
   forCoordinates: IGameForCoordinates;
+  coordinateToAbsolute: IGamePosCoordinate;
   start: Function;
   update: Function;
   reset: Function;
   drawTile: IGameTile;
+  drawSprite: IGameSprite;
   scenario: Array<Array<Array<number>>>;
 }
 
 interface IGameTile { (pos: IPosition, tile: ITileItem): void }
 
+interface IGameSprite { (pos: IPosition, sprite: string): void }
+
 interface IGameCoordinate { (pos: IPosition): Array<number> }
+
+interface IGamePosCoordinate { (pos: IPosition): IPosition }
 
 interface IGameForCoordinates { (doOnCoordinate: IPositionFunction): void }
 
 interface IPositionFunction { (pos: IPosition): void }
 
-//tiles_config.ts
-interface ITileConfig {
-  tileSize: number;
-  tiles: ITile;
-}
+//physics.ts
+interface IPhysicsMove { (coordinatePosition: IPosition, direction: IPosition, nextAbsolutePosition: IPosition): IPositionMove }
 
+//tiles_config.ts
 interface ITileKeys {
   [key: string]: ITileItem
 }
@@ -51,7 +61,6 @@ interface ITileItem {
   id: number;
   name: string;
   color: string;
-  size: number;
   physics: boolean;
   explosivable: boolean;
   isPlayer: boolean;
@@ -92,19 +101,14 @@ interface IBomber {
 
 //player.ts
 interface IPlayer {
-  hp: number;
-  dead: boolean;
-  isInvulnerable: boolean;
-  shine: boolean;
   position: IPosition;
+  absolutePosition: IPosition;
+  sprite: string;
   start: Function;
   update: Function;
   damage: Function;
-  move: Function;
   bomber: IBomber;
-  leaveBomb: Function;
   reset: Function;
-  actions: IPlayerActions;
 }
 
 interface IPlayerActions {

@@ -1,9 +1,10 @@
-import tilesConfig from './tiles_config.js';
+import tiles from './tiles.js';
 import { fase1 } from './scenarios.js';
 import player from './player.js';
 import { getTileById, arrayContains } from './utils.js'
 import enemyManager from './enemy_manager.js';
 import bombManager from './bombs.js';
+import { tileSize } from './physics.js'
 
 const game: IGame = {
   context: null,
@@ -11,6 +12,9 @@ const game: IGame = {
   updaterId: 0,
   reseting: false,
   getCoordinate: (pos: IPosition) => game.scenario[pos.y][pos.x],
+  coordinateToAbsolute: (pos: IPosition) => {
+    return {x: pos.x * tileSize, y: pos.y * tileSize};
+  },
   forCoordinates: (doOnCoordinate: IPositionFunction) => {
     for (let y = 0; y < game.scenario.length; y++) {
       for (let x = 0; x < game.scenario[y].length; x++) {
@@ -24,44 +28,47 @@ const game: IGame = {
 
     game.reset()
 
-    canvas.width = game.scenario[0].length * tilesConfig.tileSize;
-    canvas.height = game.scenario.length * tilesConfig.tileSize;
+    canvas.width = game.scenario[0].length * tileSize;
+    canvas.height = game.scenario.length * tileSize;
 
     player.start()
   },
   update: () => {
     if (game.reseting) return;
 
+    game.forCoordinates(pos => game.drawTile(pos, tiles.ground))
+
     game.forCoordinates(pos => {
-      game.drawTile(pos, tilesConfig.tiles.ground)
-        let coordinate = game.getCoordinate(pos)
-        for (let z = 0; z < coordinate.length; z++) {
-          let tile = getTileById(coordinate[z])
-          if (tile.isEnemy) {
-            let enemy = enemyManager.getEnemy(pos, tile.id)
-            if (enemy) {
-              tile.color = enemy.color
-            }
-            if (arrayContains<number>(coordinate, tilesConfig.tiles.explosion.id)) {
-              enemyManager.damage(enemy)
-            }
-          } else if (tile.isPlayer) {
-            let enemy = game.getCoordinate(pos).find(id => {
-              let tile = getTileById(id)
-              return tile.isEnemy
-            })
-            if (arrayContains<number>(coordinate, tilesConfig.tiles.explosion.id) || enemy) {
-              player.damage()
-            }
+      let coordinate = game.getCoordinate(pos)
+      for (let z = 0; z < coordinate.length; z++) {
+        let tile = getTileById(coordinate[z])
+        if (tile.isEnemy) {
+          let enemy = enemyManager.getEnemy(pos, tile.id)
+          if (enemy) {
+            tile.color = enemy.color
           }
-          game.drawTile(pos, tile)
-        }
-        if (arrayContains<number>(coordinate, tilesConfig.tiles.player.id)) {
-          if (arrayContains<number>(coordinate, tilesConfig.tiles.explosion.id)
-              || arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
+          if (arrayContains<number>(coordinate, tiles.explosion.id)) {
+            enemyManager.damage(enemy)
+          }
+        } else if (tile.isPlayer) {
+          let enemy = game.getCoordinate(pos).find(id => {
+            let tile = getTileById(id)
+            return tile.isEnemy
+          })
+          if (arrayContains<number>(coordinate, tiles.explosion.id) || enemy) {
             player.damage()
           }
+          game.drawSprite(player.absolutePosition, player.sprite)
+          continue;
         }
+        game.drawTile(pos, tile)
+      }
+      if (arrayContains<number>(coordinate, tiles.player.id)) {
+        if (arrayContains<number>(coordinate, tiles.explosion.id)
+            || arrayContains<number>(coordinate, tiles.enemySimpleMove.id)) {
+          player.damage()
+        }
+      }
     })
 
     player.update()
@@ -78,16 +85,20 @@ const game: IGame = {
     player.reset()
     enemyManager.start()
 
-    game.updaterId = setInterval(game.update, 100)
+    game.updaterId = setInterval(game.update, 22)
     game.reseting = false;
   },
   drawTile: (pos: IPosition, tile: ITileItem) => {
-    game.context.fillStyle = tile.color
-    let size = tile.size
+    let posX = pos.x * tileSize
+    let posY = pos.y * tileSize
 
-    let posX = pos.x * tilesConfig.tileSize + (tilesConfig.tileSize / 100 * (tilesConfig.tileSize - size))
-    let posY = pos.y * tilesConfig.tileSize + (tilesConfig.tileSize / 100 * (tilesConfig.tileSize - size))
-    game.context.fillRect(posX, posY, size, size);
+    game.context.fillStyle = tile.color
+    game.context.fillRect(posX, posY, tileSize, tileSize);
+  },
+  drawSprite: (pos: IPosition, sprite: string) => {
+    let image = new Image()
+    image.src = sprite
+    game.context.drawImage(image, pos.x, pos.y, tileSize, tileSize)
   }
 }
 

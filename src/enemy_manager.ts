@@ -1,5 +1,5 @@
 import game from "./game.js"
-import tilesConfig from "./tiles_config.js"
+import tiles from "./tiles.js"
 import { arrayContains } from "./utils.js"
 import EnemySimpleMove from './enemy_simple_move.js';
 import EnemyNestedMove from "./enemy_nested_move.js";
@@ -13,10 +13,10 @@ const enemyManager: IEnemyManager = {
     game.forCoordinates(pos => {
       let coordinate = game.getCoordinate(pos)
       let enemy: IBaseEnemy
-      if (arrayContains<number>(coordinate, tilesConfig.tiles.enemySimpleMove.id)) {
+      if (arrayContains<number>(coordinate, tiles.enemySimpleMove.id)) {
         enemy = new EnemySimpleMove()
       }
-      if (arrayContains<number>(coordinate, tilesConfig.tiles.enemyNestedMove.id)) {
+      if (arrayContains<number>(coordinate, tiles.enemyNestedMove.id)) {
         enemy = new EnemyNestedMove()
       }
       if (enemy) {

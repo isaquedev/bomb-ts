@@ -7,8 +7,8 @@
     "preserveConstEnums": true,
     "outDir": "public/",
     "sourceMap": true,
-    "rootDir": "./src"
+    "rootDir": "./ts"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+    "include": ["ts/**/*"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
   }

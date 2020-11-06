@@ -137,9 +137,7 @@ interface IBaseEnemy {
   id: number;
   hp: number;
   position: IPosition;
-  direction: IPosition;
-  isInvulnerable: boolean;
-  shine: boolean
+  absolutePosition: IPosition;
   color: string
   start: Function;
   update: Function;
@@ -149,7 +147,8 @@ interface IBaseEnemy {
 interface IEnemyManager {
   enemies: Array<IBaseEnemy>;
   getEnemy: IEnemyManagerGetEnemy;
-  skip: boolean;
+  skipCount: number;
+  skipMax: number;
   start: Function;
   update: Function;
   damage: IEnemyManagerDamage

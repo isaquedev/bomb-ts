@@ -5,7 +5,8 @@ import EnemySimpleMove from './enemy_simple_move.js';
 import EnemyNestedMove from "./enemy_nested_move.js";
 const enemyManager = {
     enemies: [],
-    skip: false,
+    skipCount: 0,
+    skipMax: 2,
     start: () => {
         enemyManager.enemies = [];
         game.forCoordinates(pos => {
@@ -32,8 +33,10 @@ const enemyManager = {
             game.reset();
             return;
         }
-        enemyManager.skip = !enemyManager.skip;
-        enemyManager.enemies.forEach(enemy => enemy.update(enemyManager.skip));
+        enemyManager.skipCount++;
+        enemyManager.enemies.forEach(enemy => enemy.update(enemyManager.skipCount !== enemyManager.skipMax));
+        if (enemyManager.skipCount == enemyManager.skipMax)
+            enemyManager.skipCount = 0;
     },
     damage: (enemy) => {
         enemy.damage();

@@ -44,6 +44,8 @@ const game = {
                     if (arrayContains(coordinate, tiles.explosion.id)) {
                         enemyManager.damage(enemy);
                     }
+                    game.drawSprite(enemy.absolutePosition, tiles.enemySimpleMove.sprite);
+                    continue;
                 }
                 else if (tile.isPlayer) {
                     let enemy = game.getCoordinate(pos).find(id => {

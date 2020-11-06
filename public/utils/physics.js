@@ -1,6 +1,7 @@
 import game from "../game/game.js";
 import { isTileAvailable } from "./utils.js";
 export const tileHalfSize = 3;
+export const enemyTileHalfSize = 5;
 export const tileSize = 48;
 export const physicMove = (coordinatePosition, direction, nextAbsolutePosition) => {
     let pos = { absolutePostion: { x: nextAbsolutePosition.x, y: nextAbsolutePosition.y }, coordinatePosition: { x: 0, y: 0 }, physicalValid: false };

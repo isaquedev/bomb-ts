@@ -1,7 +1,5 @@
 import BaseEnemy from "./base_enemy.js";
-import game from "../game/game.js";
 import tiles from "../game/tiles.js";
-import { isTileAvailable } from "../utils/utils.js";
 class EnemyNestedMove extends BaseEnemy {
     startEnemy() {
         this.hp = 2;
@@ -16,19 +14,15 @@ class EnemyNestedMove extends BaseEnemy {
             this.findDirection();
         }
         if (this.hasValidDirection) {
-            let newPos = this.generateNewPos();
-            if (!isTileAvailable(game.getCoordinate(newPos))) {
+            let physicsResult = this.generateNewPos();
+            if (!physicsResult.physicalValid) {
                 this.findDirection();
-                newPos = this.generateNewPos();
-                if (newPos.x === this.lastPos.x && newPos.y === this.lastPos.y) {
-                    this.findDirection();
-                    newPos = this.generateNewPos();
-                }
+                physicsResult = this.generateNewPos();
             }
-            if (newPos.x !== this.position.x || newPos.y !== this.position.y) {
-                this.lastPos = { x: this.position.x, y: this.position.y };
+            if (physicsResult.coordinatePosition.x !== this.position.x || physicsResult.coordinatePosition.y !== this.position.y) {
+                this.lastPos = { x: physicsResult.coordinatePosition.x, y: physicsResult.coordinatePosition.y };
             }
-            this.move(newPos);
+            this.move(physicsResult);
         }
     }
 }

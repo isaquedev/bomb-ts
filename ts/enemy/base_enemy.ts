@@ -1,19 +1,23 @@
 import game from "../game/game.js";
 import times from "../utils/times.js";
 import { isTileAvailable } from "../utils/utils.js";
+import { tileSize, enemyTileHalfSize, physicMove } from '../utils/physics.js';
 
 abstract class BaseEnemy implements IBaseEnemy {
   public id = 0;
   public hp = 1;
   public position: IPosition;
-  public direction: IPosition = {x: 0, y: 0}
-  public isInvulnerable = false;
-  public shine = false;
+  public absolutePosition: IPosition;
   public color = "red";
   public colors = { default: "red", damage: "MistyRose" }
 
+  protected direction: IPosition = {x: 0, y: 0}
+  private isInvulnerable = false;
+  private shine = false;
+
   public start(pos: IPosition) {
     this.position = pos
+    this.absolutePosition = {x: pos.x * tileSize, y: pos.y * tileSize}
     this.findDirection()
     this.startEnemy()
     this.setId()
@@ -111,18 +115,23 @@ abstract class BaseEnemy implements IBaseEnemy {
 
   protected abstract moveEnemy(): void;
 
-  protected move(pos: IPosition) {
-    let enemyIndex = game.getCoordinate(this.position).indexOf(this.id)
-    game.getCoordinate(this.position).splice(enemyIndex, 1)
-    this.position = pos
-    game.getCoordinate(this.position).splice(0, 0, this.id)
+  protected move(physicsResult: IPositionMove) {
+    if (physicsResult.physicalValid) {
+      let enemyIndex = game.getCoordinate(this.position).indexOf(this.id)
+      game.getCoordinate(this.position).splice(enemyIndex, 1)
+      this.position = physicsResult.coordinatePosition
+      this.absolutePosition = physicsResult.absolutePostion
+      game.getCoordinate(this.position).splice(0, 0, this.id)
+    }
   }
 
-  protected generateNewPos(): IPosition {
-    return {
-      x: this.position.x + this.direction.x, 
-      y: this.position.y + this.direction.y
+  protected generateNewPos(): IPositionMove {
+    let nextMove = {
+      x: this.absolutePosition.x + (this.direction.x * (tileSize / enemyTileHalfSize)), 
+      y: this.absolutePosition.y + (this.direction.y * (tileSize / enemyTileHalfSize))
     }
+
+    return physicMove(this.position, this.direction, nextMove)
   }
 
   protected hasValidDirection(): boolean {

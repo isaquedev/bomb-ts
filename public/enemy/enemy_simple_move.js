@@ -1,7 +1,5 @@
 import BaseEnemy from "./base_enemy.js";
-import game from "../game/game.js";
 import tiles from "../game/tiles.js";
-import { isTileAvailable } from "../utils/utils.js";
 class EnemySimpleMove extends BaseEnemy {
     startEnemy() {
         this.hp = 1;
@@ -14,12 +12,12 @@ class EnemySimpleMove extends BaseEnemy {
             this.findDirection();
         }
         if (this.hasValidDirection) {
-            let newPos = this.generateNewPos();
-            if (!isTileAvailable(game.getCoordinate(newPos))) {
+            let physicsResult = this.generateNewPos();
+            if (!physicsResult.physicalValid) {
                 this.direction = { x: this.direction.x * -1, y: this.direction.y * -1 };
-                newPos = this.generateNewPos();
+                physicsResult = this.generateNewPos();
             }
-            this.move(newPos);
+            this.move(physicsResult);
         }
     }
 }

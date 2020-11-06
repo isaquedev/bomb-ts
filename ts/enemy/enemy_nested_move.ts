@@ -23,22 +23,18 @@ class EnemyNestedMove extends BaseEnemy {
     }
 
     if (this.hasValidDirection) {
-      let newPos = this.generateNewPos()
+      let physicsResult = this.generateNewPos()
 
-      if (!isTileAvailable(game.getCoordinate(newPos))) {
+      if (!physicsResult.physicalValid) {
         this.findDirection()
-        newPos = this.generateNewPos()
-        if (newPos.x === this.lastPos.x && newPos.y === this.lastPos.y) {
-          this.findDirection()
-          newPos = this.generateNewPos()
-        }
+        physicsResult = this.generateNewPos()
       }
 
-      if (newPos.x !== this.position.x || newPos.y !== this.position.y) {
-        this.lastPos = {x: this.position.x, y: this.position.y}
+      if (physicsResult.coordinatePosition.x !== this.position.x || physicsResult.coordinatePosition.y !== this.position.y) {
+        this.lastPos = {x: physicsResult.coordinatePosition.x, y: physicsResult.coordinatePosition.y}
       }
 
-      this.move(newPos)
+      this.move(physicsResult)
     }
   }
 

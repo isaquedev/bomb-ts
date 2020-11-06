@@ -3,6 +3,8 @@ import { isTileAvailable } from "./utils.js";
 
 export const tileHalfSize = 3;
 
+export const enemyTileHalfSize = 5;
+
 export const tileSize = 48;
 
 export const physicMove: IPhysicsMove = (coordinatePosition: IPosition, direction: IPosition, nextAbsolutePosition: IPosition) => {

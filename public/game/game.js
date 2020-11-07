@@ -5,6 +5,7 @@ import { getTileById, arrayContains } from '../utils/utils.js';
 import enemyManager from '../enemy/enemy_manager.js';
 import bombManager from '../player/bombs.js';
 import { tileSize } from '../utils/physics.js';
+import times from '../utils/times.js';
 const game = {
     context: null,
     scenario: [],
@@ -77,7 +78,7 @@ const game = {
         game.scenario = JSON.parse(JSON.stringify(fase1));
         player.reset();
         enemyManager.start();
-        game.updaterId = setInterval(game.update, 22);
+        game.updaterId = setInterval(game.update, times.gameUpdate);
         game.reseting = false;
     },
     drawTile: (pos, tile) => {

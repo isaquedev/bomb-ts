@@ -1,5 +1,6 @@
 //all files
 interface IPosition {
+  [key: string]: number,
   x: number,
   y: number
 }
@@ -39,7 +40,13 @@ interface IGameForCoordinates { (doOnCoordinate: IPositionFunction): void }
 interface IPositionFunction { (pos: IPosition): void }
 
 //physics.ts
-interface IPhysicsMove { (coordinatePosition: IPosition, direction: IPosition, nextAbsolutePosition: IPosition): IPositionMove }
+interface IPhysicsMove { 
+  (
+    coordinatePosition: IPosition,
+    direction: IPosition,
+    nextAbsolutePosition: IPosition
+  ): IPositionMove
+}
 
 //tiles_config.ts
 interface ITileKeys {
@@ -161,7 +168,7 @@ interface IEnemyManagerDamage { (enemy: IBaseEnemy): void }
 //utils.ts
 interface IGetTileById { (tileId: number): ITileItem }
 
-interface IIsTileAvailable { (layer: Array<number>): boolean }
+interface IIsTileAvailable { (physicsPosition: IPosition, currentPosition: IPosition): boolean }
 
 interface IIsTileExplosivable { (layer: Array<number>): boolean }
 
@@ -173,7 +180,8 @@ interface IArrayContains { <T>(array: Array<T>, value: T): boolean }
 
 //times.ts
 interface ITimes {
-  playerInvulnerability: number,
+  gameUpdate: number,
+  invulnerability: number,
   bombDelayToExplode: number,
-  explosionDuration: number
+  explosionDuration: number,
 }

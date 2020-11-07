@@ -3,7 +3,7 @@ import { arrayContains } from '../utils/utils.js';
 import tiles from '../game/tiles.js';
 import bombManager from './bombs.js';
 import times from '../utils/times.js';
-import { tileSize, tileHalfSize, physicMove } from '../utils/physics.js';
+import { tileSize, playerSpeed, physicMove } from '../utils/physics.js';
 class Player {
     constructor() {
         this.position = { x: 1, y: 1 };
@@ -62,12 +62,13 @@ class Player {
         this.leaveBomb();
     }
     damage() {
+        return;
         if (this.isInvulnerable || this.dead)
             return;
         if (this.hp > 1) {
             this.hp -= 1;
             this.isInvulnerable = true;
-            setTimeout(() => this.isInvulnerable = false, times.playerInvulnerability);
+            setTimeout(() => this.isInvulnerable = false, times.invulnerability);
         }
         else {
             alert('player dead');
@@ -109,7 +110,7 @@ class Player {
         this.dead = false;
         this.isInvulnerable = false;
         this.hp = 1;
-        this.moveSpeed = tileSize / tileHalfSize;
+        this.moveSpeed = tileSize / playerSpeed;
         game.forCoordinates(pos => {
             if (arrayContains(game.getCoordinate(pos), tiles.player.id)) {
                 this.position = pos;

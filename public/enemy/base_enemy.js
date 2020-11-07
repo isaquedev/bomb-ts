@@ -1,7 +1,6 @@
 import game from "../game/game.js";
 import times from "../utils/times.js";
-import { isTileAvailable } from "../utils/utils.js";
-import { tileSize, enemyTileHalfSize, physicMove } from '../utils/physics.js';
+import { tileSize, enemySlowMove, physicEnemyMove, isTileAvailable } from '../utils/physics.js';
 class BaseEnemy {
     constructor() {
         this.id = 0;
@@ -66,18 +65,18 @@ class BaseEnemy {
     findHorizontalyDirection() {
         let checkLeftFirst = Math.round(Math.random()) == 1;
         if (checkLeftFirst) {
-            if (isTileAvailable(game.getCoordinate({ x: this.position.x - 1, y: this.position.y }))) {
+            if (isTileAvailable({ x: this.position.x - 1, y: this.position.y }, this.position)) {
                 return this.direction = { x: -1, y: 0 };
             }
-            else if (isTileAvailable(game.getCoordinate({ x: this.position.x + 1, y: this.position.y }))) {
+            else if (isTileAvailable({ x: this.position.x + 1, y: this.position.y }, this.position)) {
                 return this.direction = { x: 1, y: 0 };
             }
         }
         else {
-            if (isTileAvailable(game.getCoordinate({ x: this.position.x + 1, y: this.position.y }))) {
+            if (isTileAvailable({ x: this.position.x + 1, y: this.position.y }, this.position)) {
                 return this.direction = { x: 1, y: 0 };
             }
-            else if (isTileAvailable(game.getCoordinate({ x: this.position.x - 1, y: this.position.y }))) {
+            else if (isTileAvailable({ x: this.position.x - 1, y: this.position.y }, this.position)) {
                 return this.direction = { x: -1, y: 0 };
             }
         }
@@ -86,18 +85,18 @@ class BaseEnemy {
     findVerticalyDirection() {
         let checkTopFirst = Math.round(Math.random()) == 1;
         if (checkTopFirst) {
-            if (isTileAvailable(game.getCoordinate({ x: this.position.x, y: this.position.y - 1 }))) {
+            if (isTileAvailable({ x: this.position.x, y: this.position.y - 1 }, this.position)) {
                 return this.direction = { x: 0, y: -1 };
             }
-            else if (isTileAvailable(game.getCoordinate({ x: this.position.x, y: this.position.y + 1 }))) {
+            else if (isTileAvailable({ x: this.position.x, y: this.position.y + 1 }, this.position)) {
                 return this.direction = { x: 0, y: 1 };
             }
         }
         else {
-            if (isTileAvailable(game.getCoordinate({ x: this.position.x, y: this.position.y + 1 }))) {
+            if (isTileAvailable({ x: this.position.x, y: this.position.y + 1 }, this.position)) {
                 return this.direction = { x: 0, y: 1 };
             }
-            else if (isTileAvailable(game.getCoordinate({ x: this.position.x, y: this.position.y - 1 }))) {
+            else if (isTileAvailable({ x: this.position.x, y: this.position.y - 1 }, this.position)) {
                 return this.direction = { x: 0, y: -1 };
             }
         }
@@ -114,10 +113,10 @@ class BaseEnemy {
     }
     generateNewPos() {
         let nextMove = {
-            x: this.absolutePosition.x + (this.direction.x * (tileSize / enemyTileHalfSize)),
-            y: this.absolutePosition.y + (this.direction.y * (tileSize / enemyTileHalfSize))
+            x: this.absolutePosition.x + (this.direction.x * (tileSize / enemySlowMove)),
+            y: this.absolutePosition.y + (this.direction.y * (tileSize / enemySlowMove))
         };
-        return physicMove(this.position, this.direction, nextMove);
+        return physicEnemyMove(this.position, this.direction, nextMove);
     }
     hasValidDirection() {
         return this.direction.x !== 0 || this.direction.y !== 0;
@@ -128,7 +127,7 @@ class BaseEnemy {
         this.hp -= 1;
         if (this.hp > 0) {
             this.isInvulnerable = true;
-            setTimeout(() => this.isInvulnerable = false, times.playerInvulnerability);
+            setTimeout(() => this.isInvulnerable = false, times.invulnerability);
         }
         else {
             let enemyIndex = game.getCoordinate(this.position).indexOf(this.id);

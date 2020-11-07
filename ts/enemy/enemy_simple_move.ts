@@ -1,7 +1,7 @@
 import BaseEnemy from "./base_enemy.js";
 import tiles from "../game/tiles.js";
-import { physicMove } from "../utils/physics.js";
 
+//Set a direction and only move on orientation of them
 class EnemySimpleMove extends BaseEnemy {
 
   protected startEnemy(): void {
@@ -22,7 +22,7 @@ class EnemySimpleMove extends BaseEnemy {
 
       if (!physicsResult.physicalValid) {
         this.direction = { x: this.direction.x * -1, y: this.direction.y * -1 }
-        physicsResult = this.generateNewPos()
+        return;
       }
 
       this.move(physicsResult)

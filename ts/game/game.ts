@@ -5,6 +5,7 @@ import { getTileById, arrayContains } from '../utils/utils.js'
 import enemyManager from '../enemy/enemy_manager.js';
 import bombManager from '../player/bombs.js';
 import { tileSize } from '../utils/physics.js'
+import times from '../utils/times.js'
 
 const game: IGame = {
   context: null,
@@ -87,7 +88,7 @@ const game: IGame = {
     player.reset()
     enemyManager.start()
 
-    game.updaterId = setInterval(game.update, 22)
+    game.updaterId = setInterval(game.update, times.gameUpdate)
     game.reseting = false;
   },
   drawTile: (pos: IPosition, tile: ITileItem) => {

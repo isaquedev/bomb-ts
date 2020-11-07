@@ -11,19 +11,6 @@ export const getTileById = (tileId) => {
     });
     return tile;
 };
-export const isTileAvailable = (layer) => {
-    let available = true;
-    layer.forEach(tileId => {
-        let tile = getTileById(tileId);
-        if (tile) {
-            if (tile.physics) {
-                available = false;
-                return;
-            }
-        }
-    });
-    return available;
-};
 export const isTileExplosivable = (layer) => {
     let explosivable = true;
     layer.forEach(tileId => {

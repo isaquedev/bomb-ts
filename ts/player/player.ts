@@ -3,7 +3,7 @@ import { arrayContains } from '../utils/utils.js';
 import tiles from '../game/tiles.js';
 import bombManager from './bombs.js';
 import times from '../utils/times.js';
-import { tileSize, tileHalfSize, physicMove } from '../utils/physics.js'
+import { tileSize, playerSpeed, physicMove } from '../utils/physics.js'
 
 class Player implements IPlayer {
   public position: IPosition = {x: 1, y: 1}
@@ -67,13 +67,14 @@ class Player implements IPlayer {
   }
 
   public damage() {
+    return;
     if (this.isInvulnerable || this.dead) return;
 
     if (this.hp > 1) {
       this.hp -= 1;
       this.isInvulnerable = true
 
-      setTimeout(() => this.isInvulnerable = false, times.playerInvulnerability)
+      setTimeout(() => this.isInvulnerable = false, times.invulnerability)
     } else {
       //TODO player death state
       alert('player dead')
@@ -119,7 +120,7 @@ class Player implements IPlayer {
     this.dead = false
     this.isInvulnerable = false
     this.hp = 1
-    this.moveSpeed = tileSize / tileHalfSize
+    this.moveSpeed = tileSize / playerSpeed
     game.forCoordinates(pos => {
       if (arrayContains<number>(game.getCoordinate(pos), tiles.player.id)) {
         this.position = pos

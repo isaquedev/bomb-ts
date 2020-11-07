@@ -15,7 +15,7 @@ class EnemySimpleMove extends BaseEnemy {
             let physicsResult = this.generateNewPos();
             if (!physicsResult.physicalValid) {
                 this.direction = { x: this.direction.x * -1, y: this.direction.y * -1 };
-                physicsResult = this.generateNewPos();
+                return;
             }
             this.move(physicsResult);
         }

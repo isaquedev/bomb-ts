@@ -1,15 +1,12 @@
 import BaseEnemy from "./base_enemy.js";
-import game from "../game/game.js";
 import tiles from "../game/tiles.js";
-import { isTileAvailable } from "../utils/utils.js";
 
+//When the current direction don't are valid
+//the enemy find a new random valid direction
 class EnemyNestedMove extends BaseEnemy {
-
-  private lastPos: IPosition
 
   protected startEnemy(): void {
     this.hp = 2
-    this.lastPos = {x: this.position.x, y: this.position.y}
     this.colors = {default: "Teal", damage: "PaleTurquoise"}
   }
 
@@ -27,11 +24,20 @@ class EnemyNestedMove extends BaseEnemy {
 
       if (!physicsResult.physicalValid) {
         this.findDirection()
-        physicsResult = this.generateNewPos()
-      }
 
-      if (physicsResult.coordinatePosition.x !== this.position.x || physicsResult.coordinatePosition.y !== this.position.y) {
-        this.lastPos = {x: physicsResult.coordinatePosition.x, y: physicsResult.coordinatePosition.y}
+        // use this code in a more complex enemy
+        // let oldDirection: IPosition = {x: this.direction.x, y: this.direction.y}
+        // let tries = 2
+        // for (let i = 0; i < tries; i++) {
+        //   this.findDirection()
+        //   if (this.direction.x !== oldDirection.x * -1
+        //     && this.direction.y !== oldDirection.y * -1) {
+        //       console.log('new', this.direction, 'old', oldDirection)
+        //       break
+        //   }
+        // }
+
+        physicsResult = this.generateNewPos()
       }
 
       this.move(physicsResult)

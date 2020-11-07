@@ -8,8 +8,6 @@ export const enemyFastMove = 7
 
 export const enemySlowMove = 9;
 
-export const tileSize = 48;
-
 interface IPhysicPositionFunction { 
   (
     direction: number,
@@ -31,14 +29,15 @@ const physicPosition: IPhysicPositionFunction = (
     let physicPosition: number
     let perfect = true
     if (direction > 0) {
-      physicPosition = Math.ceil(nextAbsolutePosition / tileSize)
+      physicPosition = Math.ceil(nextAbsolutePosition / game.tileSize)
     } else if (direction < 0) {
-      physicPosition = Math.floor(nextAbsolutePosition / tileSize)
+      physicPosition = Math.floor(nextAbsolutePosition / game.tileSize)
     } else {
-      let nextCoordinatePos = parseFloat((nextAbsolutePosition / tileSize).toFixed(2))
+      let nextCoordinatePos = parseFloat((nextAbsolutePosition / game.tileSize).toFixed(2))
       perfect = Number.isInteger(nextCoordinatePos)
       physicPosition = currentCoordinatePos
     }
+
     return {
       perfect,
       physicPosition
@@ -62,7 +61,7 @@ const physicAdjustAbsolutePosition: IPhysicAdjustAbsolutePosition = (
 ) => {
   if (!perfect) {
     let moveToOrigin: boolean
-    let realCoordinateX = position.absolutePostion[selectedPosition] / tileSize
+    let realCoordinateX = position.absolutePostion[selectedPosition] / game.tileSize
     if (position.physicalValid) {
       if (realCoordinateX > position.coordinatePosition[selectedPosition]) {
         moveToOrigin = true
@@ -85,9 +84,9 @@ const physicAdjustAbsolutePosition: IPhysicAdjustAbsolutePosition = (
 
     if (position.physicalValid) {
       if (moveToOrigin) {
-        position.absolutePostion[selectedPosition] -= (tileSize / playerSpeed)
+        position.absolutePostion[selectedPosition] -= (game.tileSize / playerSpeed)
       } else {
-        position.absolutePostion[selectedPosition] += (tileSize / playerSpeed)
+        position.absolutePostion[selectedPosition] += (game.tileSize / playerSpeed)
       }
     }
   }
@@ -111,8 +110,8 @@ export const physicMove: IPhysicsMove = (
   let physicResult: IPosition = {x: physicResultX.physicPosition, y: physicResultY.physicPosition}
 
   pos.coordinatePosition = {
-    x: Math.round(nextAbsolutePosition.x / tileSize),
-    y: Math.round(nextAbsolutePosition.y / tileSize),
+    x: Math.round(nextAbsolutePosition.x / game.tileSize),
+    y: Math.round(nextAbsolutePosition.y / game.tileSize),
   }
 
   pos.physicalValid = isTileAvailable(physicResult, pos.coordinatePosition)
@@ -138,9 +137,9 @@ const physicalSimplePositionResult: IPhysicalSimplePositionResult = (
 ): number => {
   let physicPosition: number
   if (direction > 0) {
-    physicPosition = Math.ceil(nextAbsolutePosition / tileSize)
+    physicPosition = Math.ceil(nextAbsolutePosition / game.tileSize)
   } else if (direction < 0) {
-    physicPosition = Math.floor(nextAbsolutePosition / tileSize)
+    physicPosition = Math.floor(nextAbsolutePosition / game.tileSize)
   } else {
     physicPosition = coordinatePosition
   }
@@ -162,8 +161,8 @@ export const physicEnemyMove: IPhysicsMove = (
   let physicY = physicalSimplePositionResult(direction.y, coordinatePosition.y, nextAbsolutePosition.y)
 
   pos.coordinatePosition = {
-    x: Math.round(nextAbsolutePosition.x / tileSize),
-    y: Math.round(nextAbsolutePosition.y / tileSize),
+    x: Math.round(nextAbsolutePosition.x / game.tileSize),
+    y: Math.round(nextAbsolutePosition.y / game.tileSize),
   }
 
   pos.physicalValid = isTileAvailable({x: physicX, y: physicY}, pos.coordinatePosition)

@@ -4,17 +4,36 @@ import player from '../player/player.js';
 import { getTileById, arrayContains } from '../utils/utils.js'
 import enemyManager from '../enemy/enemy_manager.js';
 import bombManager from '../player/bombs.js';
-import { tileSize } from '../utils/physics.js'
 import times from '../utils/times.js'
+
+const gameResize = () => {
+  const canvas = document.getElementById("app_canvas") as HTMLCanvasElement
+  game.context = canvas.getContext('2d');
+
+  let width = window.innerWidth
+  let height = window.innerHeight
+
+  let scenarioWidth = game.scenario[0].length
+  let scenarioHeight = game.scenario.length
+
+  let tileX = Math.round(width / scenarioWidth)
+  let tileY = Math.round(height / scenarioHeight)
+
+  game.tileSize = tileX < tileY ? tileX : tileY
+
+  canvas.width = scenarioWidth * game.tileSize;
+  canvas.height = scenarioHeight * game.tileSize;
+}
 
 const game: IGame = {
   context: null,
   scenario: [],
+  tileSize: 48,
   updaterId: 0,
   reseting: false,
   getCoordinate: (pos: IPosition) => game.scenario[pos.y][pos.x],
   coordinateToAbsolute: (pos: IPosition) => {
-    return {x: pos.x * tileSize, y: pos.y * tileSize};
+    return {x: pos.x * game.tileSize, y: pos.y * game.tileSize};
   },
   forCoordinates: (doOnCoordinate: IPositionFunction) => {
     for (let y = 0; y < game.scenario.length; y++) {
@@ -24,15 +43,10 @@ const game: IGame = {
     }
   },
   start: () => {
-    const canvas = document.getElementById("app_canvas") as HTMLCanvasElement
-    game.context = canvas.getContext('2d');
-
     game.reset()
-
-    canvas.width = game.scenario[0].length * tileSize;
-    canvas.height = game.scenario.length * tileSize;
-
     player.start()
+
+    // window.addEventListener("resize", () => gameResize());
   },
   update: () => {
     if (game.reseting) return;
@@ -80,10 +94,11 @@ const game: IGame = {
   reset: () => {
     game.reseting = true;
     clearInterval(game.updaterId)
-
     bombManager.reset()
 
     game.scenario = JSON.parse(JSON.stringify(fase1))
+
+    gameResize()
 
     player.reset()
     enemyManager.start()
@@ -92,15 +107,15 @@ const game: IGame = {
     game.reseting = false;
   },
   drawTile: (pos: IPosition, tile: ITileItem) => {
-    let posX = pos.x * tileSize
-    let posY = pos.y * tileSize
+    let posX = pos.x * game.tileSize
+    let posY = pos.y * game.tileSize
 
     game.drawSprite({x: posX, y: posY}, tile.sprite)
   },
   drawSprite: (pos: IPosition, sprite: string) => {
     let image = new Image()
     image.src = "./resources/images/" + sprite + ".png"
-    game.context.drawImage(image, pos.x, pos.y, tileSize, tileSize)
+    game.context.drawImage(image, pos.x, pos.y, game.tileSize, game.tileSize)
   }
 }
 

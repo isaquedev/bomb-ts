@@ -1,6 +1,6 @@
 import game from "../game/game.js";
 import times from "../utils/times.js";
-import { tileSize, enemySlowMove, physicEnemyMove, isTileAvailable } from '../utils/physics.js';
+import { enemySlowMove, physicEnemyMove, isTileAvailable } from '../utils/physics.js';
 
 abstract class BaseEnemy implements IBaseEnemy {
   public id = 0;
@@ -16,7 +16,7 @@ abstract class BaseEnemy implements IBaseEnemy {
 
   public start(pos: IPosition) {
     this.position = pos
-    this.absolutePosition = {x: pos.x * tileSize, y: pos.y * tileSize}
+    this.absolutePosition = {x: pos.x * game.tileSize, y: pos.y * game.tileSize}
     this.findDirection()
     this.startEnemy()
     this.setId()
@@ -126,8 +126,8 @@ abstract class BaseEnemy implements IBaseEnemy {
 
   protected generateNewPos(): IPositionMove {
     let nextMove = {
-      x: this.absolutePosition.x + (this.direction.x * (tileSize / enemySlowMove)), 
-      y: this.absolutePosition.y + (this.direction.y * (tileSize / enemySlowMove))
+      x: this.absolutePosition.x + (this.direction.x * (game.tileSize / enemySlowMove)), 
+      y: this.absolutePosition.y + (this.direction.y * (game.tileSize / enemySlowMove))
     }
 
     return physicEnemyMove(this.position, this.direction, nextMove)

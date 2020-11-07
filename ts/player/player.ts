@@ -3,10 +3,11 @@ import { arrayContains } from '../utils/utils.js';
 import tiles from '../game/tiles.js';
 import bombManager from './bombs.js';
 import times from '../utils/times.js';
-import { tileSize, playerSpeed, physicMove } from '../utils/physics.js'
+import { playerSpeed, physicMove } from '../utils/physics.js'
 
 class Player implements IPlayer {
   public position: IPosition = {x: 1, y: 1}
+  public absoluteCoordinatePosition: IPosition = {x: 0, y: 0}
   public absolutePosition: IPosition = {x: 0, y: 0}
   public bomber: IBomber = {bombPower: 1, bombCount: 1}
 
@@ -109,6 +110,10 @@ class Player implements IPlayer {
         this.position = physicsResult.coordinatePosition
         game.getCoordinate(physicsResult.coordinatePosition).push(playerTile.id)
         this.absolutePosition = physicsResult.absolutePostion
+        this.absoluteCoordinatePosition = {
+          x: this.absolutePosition.x / game.tileSize,
+          y: this.absolutePosition.y / game.tileSize
+        }
       }
     }
   }
@@ -118,7 +123,7 @@ class Player implements IPlayer {
     this.isInvulnerable = false
     this.hp = 1
     this.bomber = {bombCount: 1, bombPower: 1}
-    this.moveSpeed = tileSize / playerSpeed
+    this.moveSpeed = game.tileSize / playerSpeed
     this.actions.status = {
       leaveBomb: false,
       moveBot: false,
@@ -130,6 +135,7 @@ class Player implements IPlayer {
       if (arrayContains<number>(game.getCoordinate(pos), tiles.player.id)) {
         this.position = pos
         this.absolutePosition = game.coordinateToAbsolute(pos)
+        this.absoluteCoordinatePosition = pos
       }
     })
   }

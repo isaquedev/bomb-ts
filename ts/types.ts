@@ -14,6 +14,7 @@ interface IPositionMove {
 //game.ts
 interface IGame {
   context: CanvasRenderingContext2D;
+  tileSize: number;
   updaterId: number;
   reseting: boolean;
   getCoordinate: IGameCoordinate;

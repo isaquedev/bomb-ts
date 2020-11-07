@@ -1,6 +1,7 @@
 import game from "../game/game.js";
 import times from "../utils/times.js";
 import { enemySlowMove, physicEnemyMove, isTileEnemyIIsTileAvailable } from '../utils/physics.js';
+import { random } from "../utils/utils.js";
 
 abstract class BaseEnemy implements IBaseEnemy {
   public id = 0;
@@ -19,7 +20,7 @@ abstract class BaseEnemy implements IBaseEnemy {
     this.uuid = Math.random().toFixed(4) + Math.random().toFixed(4)
     this.position = pos
     this.absolutePosition = {x: pos.x * game.tileSize, y: pos.y * game.tileSize}
-    this.findDirection()
+    this.randomAvailableDirection()
     this.startEnemy()
     this.setId()
   }
@@ -48,86 +49,38 @@ abstract class BaseEnemy implements IBaseEnemy {
     }
   }
 
-  protected findDirection() {
-    let moveHorizontaly = Math.round(Math.random()) == 1
-
-    if (moveHorizontaly) {
-      let direction = this.findHorizontalyDirection()
-      if (direction) {
-        this.direction = direction;
-      } else {
-        direction = this.findVerticalyDirection()
-        if (direction) {
-          this.direction = direction
-        }
-      }
-    } else {
-      let direction = this.findVerticalyDirection()
-      if (direction) {
-        this.direction = direction
-      } else {
-        direction = this.findHorizontalyDirection()
-        if (direction) {
-          this.direction = direction
-        }
-      }
+  protected findAvailableDirections(): Array<IPosition> {
+    let availableDirection: Array<IPosition> = []
+    if (isTileEnemyIIsTileAvailable(
+      this.uuid, {x: -1, y: 0}, this.absolutePosition, {x: this.position.x - 1, y: this.position.y}, this.position)
+    ) {
+      availableDirection.push({x: -1, y: 0})
     }
+    if (isTileEnemyIIsTileAvailable(
+      this.uuid, {x: 1, y: 0}, this.absolutePosition, {x: this.position.x + 1, y: this.position.y}, this.position)
+    ) {
+      availableDirection.push({x: 1, y: 0})
+    }
+    if (isTileEnemyIIsTileAvailable(
+      this.uuid, {x: 0, y: -1}, this.absolutePosition, {x: this.position.x, y: this.position.y - 1}, this.position)
+    ) {
+      availableDirection.push({x: 0, y: -1})
+    }
+    if (isTileEnemyIIsTileAvailable(
+      this.uuid, {x: 0, y: 1}, this.absolutePosition, {x: this.position.x, y: this.position.y + 1}, this.position)
+    ) {
+      availableDirection.push({x: 0, y: 1})
+    }
+    return availableDirection
   }
 
-  private findHorizontalyDirection(): IPosition {
-    let checkLeftFirst = Math.round(Math.random()) == 1
-
-    if (checkLeftFirst) {
-      if (isTileEnemyIIsTileAvailable(
-        this.uuid, {x: -1, y: 0}, this.absolutePosition, {x: this.position.x - 1, y: this.position.y}, this.position)
-      ) {
-        return this.direction = {x: -1, y: 0}
-      } else if (isTileEnemyIIsTileAvailable(
-        this.uuid, {x: 1, y: 0}, this.absolutePosition, {x: this.position.x + 1, y: this.position.y}, this.position)
-      ) {
-        return this.direction = {x: 1, y: 0}
-      }
-    } else {
-      if (isTileEnemyIIsTileAvailable(
-        this.uuid, {x: 1, y: 0}, this.absolutePosition, {x: this.position.x + 1, y: this.position.y}, this.position)
-      ) {
-        return this.direction = {x: 1, y: 0}
-      } else if (isTileEnemyIIsTileAvailable(
-        this.uuid, {x: -1, y: 0}, this.absolutePosition, {x: this.position.x - 1, y: this.position.y}, this.position)
-      ) {
-        return this.direction = {x: -1, y: 0}
-      }
+  protected randomAvailableDirection(): IPosition {
+    let availableDirection = this.findAvailableDirections()
+    if (availableDirection.length > 0) {
+      let selectedDirection = random(0, availableDirection.length - 1)
+      return availableDirection[selectedDirection]
     }
-
-    return undefined
-  }
-
-  private findVerticalyDirection(): IPosition {
-    let checkTopFirst = Math.round(Math.random()) == 1
-
-    if (checkTopFirst) {
-      if (isTileEnemyIIsTileAvailable(
-        this.uuid, {x: 0, y: -1}, this.absolutePosition, {x: this.position.x, y: this.position.y - 1}, this.position)
-      ) {
-        return this.direction = {x: 0, y: -1}
-      } else if (isTileEnemyIIsTileAvailable(
-        this.uuid, {x: 0, y: 1}, this.absolutePosition, {x: this.position.x, y: this.position.y + 1}, this.position)
-      ) {
-        return this.direction = {x: 0, y: 1}
-      }
-    } else {
-      if (isTileEnemyIIsTileAvailable(
-        this.uuid, {x: 0, y: 1}, this.absolutePosition, {x: this.position.x, y: this.position.y + 1}, this.position)
-      ) {
-        return this.direction = {x: 0, y: 1}
-      } else if (isTileEnemyIIsTileAvailable(
-        this.uuid, {x: 0, y: -1}, this.absolutePosition, {x: this.position.x, y: this.position.y - 1}, this.position)
-      ) {
-        return this.direction = {x: 0, y: -1}
-      }
-    }
-
-    return undefined
+    return this.direction
   }
 
   protected abstract moveEnemy(): void;

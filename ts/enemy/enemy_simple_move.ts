@@ -1,7 +1,8 @@
 import BaseEnemy from "./base_enemy.js";
 import tiles from "../game/tiles.js";
 
-//Set a direction and only move on orientation of them
+//When the current direction don't are valid
+//the enemy find a new random valid direction
 class EnemySimpleMove extends BaseEnemy {
 
   protected startEnemy(): void {
@@ -14,15 +15,15 @@ class EnemySimpleMove extends BaseEnemy {
   
   protected moveEnemy(): void {
     if (!this.hasValidDirection()) {
-      this.findDirection();
+      this.direction = this.randomAvailableDirection();
     }
 
     if (this.hasValidDirection) {
       let physicsResult = this.generateNewPos()
 
       if (!physicsResult.physicalValid) {
-        this.direction = { x: this.direction.x * -1, y: this.direction.y * -1 }
-        return;
+        this.direction = this.randomAvailableDirection()
+        physicsResult = this.generateNewPos()
       }
 
       this.move(physicsResult)

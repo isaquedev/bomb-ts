@@ -1,9 +1,15 @@
 import BaseEnemy from "./base_enemy.js";
 import tiles from "../game/tiles.js";
+import { random } from "../utils/utils.js";
 
 //When the current direction don't are valid
 //the enemy find a new random valid direction
+
+//When have another valid direction during the path
+//the enemy has 30% chance of chancing his direction
 class EnemyNestedMove extends BaseEnemy {
+
+  private changeChance = 30
 
   protected startEnemy(): void {
     this.hp = 2
@@ -16,28 +22,28 @@ class EnemyNestedMove extends BaseEnemy {
 
   protected moveEnemy(): void {
     if (!this.hasValidDirection()) {
-      this.findDirection();
+      this.direction = this.randomAvailableDirection();
     }
 
     if (this.hasValidDirection) {
       let physicsResult = this.generateNewPos()
 
       if (!physicsResult.physicalValid) {
-        this.findDirection()
-
-        // use this code in a more complex enemy
-        // let oldDirection: IPosition = {x: this.direction.x, y: this.direction.y}
-        // let tries = 2
-        // for (let i = 0; i < tries; i++) {
-        //   this.findDirection()
-        //   if (this.direction.x !== oldDirection.x * -1
-        //     && this.direction.y !== oldDirection.y * -1) {
-        //       console.log('new', this.direction, 'old', oldDirection)
-        //       break
-        //   }
-        // }
-
+        this.direction = this.randomAvailableDirection()
         physicsResult = this.generateNewPos()
+      } else {
+        let availableDirections = this.findAvailableDirections()
+        let anotherAvailableDirection = availableDirections.find(direction => {
+          return direction.x !== this.direction.x && direction.y !== this.direction.y
+          && direction.x !== this.direction.x * -1 && direction.y !== this.direction.y * -1 
+        })
+        if (anotherAvailableDirection) {
+          let changeDirection = random(1, 100)
+          if (changeDirection > 100 - this.changeChance) {
+            this.direction = anotherAvailableDirection
+          }
+          physicsResult = this.generateNewPos()
+        }
       }
 
       this.move(physicsResult)

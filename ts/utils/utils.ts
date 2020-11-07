@@ -58,3 +58,9 @@ export const getLayer: IGetLayer = (pos: IPosition): Array<number> => {
 export const arrayContains: IArrayContains = <T>(array: Array<T>, value: T): boolean => {
   return array.indexOf(value) !== -1;
 }
+
+interface IRandom { (min: number, max: number): number }
+
+export const random: IRandom = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}

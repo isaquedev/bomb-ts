@@ -27,7 +27,16 @@ const enemyManager: IEnemyManager = {
     })
   },
   getEnemy: (pos: IPosition, tileId: number) => {
-    return enemyManager.enemies.find(enemy => enemy.id === tileId && enemy.position.x === pos.x && enemy.position.y === pos.y)
+    return enemyManager.enemies.find(enemy =>
+      enemy.id === tileId
+      && enemy.position.x === pos.x
+      && enemy.position.y === pos.y)
+  },
+  getAllEnemies: (pos: IPosition, tileId: number) => {
+    return enemyManager.enemies.filter(enemy => 
+      enemy.id === tileId
+      && enemy.position.x === pos.x
+      && enemy.position.y === pos.y)
   },
   update: () => {
     if (enemyManager.enemies.length === 0) {

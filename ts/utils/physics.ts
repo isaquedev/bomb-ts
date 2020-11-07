@@ -1,3 +1,4 @@
+import enemyManager from "../enemy/enemy_manager.js";
 import game from "../game/game.js";
 import tiles from "../game/tiles.js";
 import { getTileById } from "./utils.js";
@@ -21,6 +22,11 @@ interface IPhysicPositionResult {
   physicPosition: number
 }
 
+const isCenteredPosition = (absolutePosition: number): boolean => {
+  let nextCoordinatePos = parseFloat((absolutePosition / game.tileSize).toFixed(2))
+  return Number.isInteger(nextCoordinatePos)
+}
+
 const physicPosition: IPhysicPositionFunction = (
     direction: number,
     currentCoordinatePos: number,
@@ -29,12 +35,11 @@ const physicPosition: IPhysicPositionFunction = (
     let physicPosition: number
     let perfect = true
     if (direction > 0) {
-      physicPosition = Math.ceil(nextAbsolutePosition / game.tileSize)
+      physicPosition = Math.ceil(parseFloat((nextAbsolutePosition / game.tileSize).toFixed(2)))
     } else if (direction < 0) {
-      physicPosition = Math.floor(nextAbsolutePosition / game.tileSize)
+      physicPosition = Math.floor(parseFloat((nextAbsolutePosition / game.tileSize).toFixed(2)))
     } else {
-      let nextCoordinatePos = parseFloat((nextAbsolutePosition / game.tileSize).toFixed(2))
-      perfect = Number.isInteger(nextCoordinatePos)
+      perfect = isCenteredPosition(nextAbsolutePosition)
       physicPosition = currentCoordinatePos
     }
 
@@ -130,46 +135,6 @@ interface IPhysicalSimplePositionResult {
   ): number
 }
 
-const physicalSimplePositionResult: IPhysicalSimplePositionResult = (
-  direction: number,
-  coordinatePosition: number,
-  nextAbsolutePosition: number,
-): number => {
-  let physicPosition: number
-  if (direction > 0) {
-    physicPosition = Math.ceil(nextAbsolutePosition / game.tileSize)
-  } else if (direction < 0) {
-    physicPosition = Math.floor(nextAbsolutePosition / game.tileSize)
-  } else {
-    physicPosition = coordinatePosition
-  }
-  return physicPosition
-}
-
-export const physicEnemyMove: IPhysicsMove = (
-    coordinatePosition: IPosition,
-    direction: IPosition,
-    nextAbsolutePosition: IPosition
-  ) => {
-  let pos: IPositionMove = {
-    absolutePostion: {x: nextAbsolutePosition.x, y: nextAbsolutePosition.y},
-    coordinatePosition: {x: 0, y: 0},
-    physicalValid: false
-  }
-
-  let physicX = physicalSimplePositionResult(direction.x, coordinatePosition.x, nextAbsolutePosition.x)
-  let physicY = physicalSimplePositionResult(direction.y, coordinatePosition.y, nextAbsolutePosition.y)
-
-  pos.coordinatePosition = {
-    x: Math.round(nextAbsolutePosition.x / game.tileSize),
-    y: Math.round(nextAbsolutePosition.y / game.tileSize),
-  }
-
-  pos.physicalValid = isTileAvailable({x: physicX, y: physicY}, pos.coordinatePosition)
-
-  return pos
-}
-
 export const isTileAvailable: IIsTileAvailable = (
   physicsPosition: IPosition,
   currentPosition: IPosition): boolean => {
@@ -190,5 +155,102 @@ export const isTileAvailable: IIsTileAvailable = (
       }
     }
   })
+  return available;
+}
+
+const physicalSimplePositionResult: IPhysicalSimplePositionResult = (
+  direction: number,
+  coordinatePosition: number,
+  nextAbsolutePosition: number,
+): number => {
+  let physicPosition: number
+  if (direction > 0) {
+    physicPosition = Math.ceil(parseFloat((nextAbsolutePosition / game.tileSize).toFixed(2)))
+  } else if (direction < 0) {
+    physicPosition = Math.floor(parseFloat((nextAbsolutePosition / game.tileSize).toFixed(2)))
+  } else {
+    physicPosition = coordinatePosition
+  }
+  return physicPosition
+}
+
+export const physicEnemyMove: IPhysicsEnemyMove = (
+    enemyUuid: string,
+    coordinatePosition: IPosition,
+    direction: IPosition,
+    currentAbsolutePosition: IPosition,
+    nextAbsolutePosition: IPosition
+  ) => {
+  let pos: IPositionMove = {
+    absolutePostion: {x: nextAbsolutePosition.x, y: nextAbsolutePosition.y},
+    coordinatePosition: {x: 0, y: 0},
+    physicalValid: false
+  }
+
+  let physicX = physicalSimplePositionResult(direction.x, coordinatePosition.x, nextAbsolutePosition.x)
+  let physicY = physicalSimplePositionResult(direction.y, coordinatePosition.y, nextAbsolutePosition.y)
+
+  pos.coordinatePosition = {
+    x: Math.round(nextAbsolutePosition.x / game.tileSize),
+    y: Math.round(nextAbsolutePosition.y / game.tileSize),
+  }
+
+  pos.physicalValid = isTileEnemyIIsTileAvailable(
+    enemyUuid,
+    direction,
+    currentAbsolutePosition,
+    {x: physicX, y: physicY},
+    pos.coordinatePosition
+  )
+
+  return pos
+}
+
+export const isTileEnemyIIsTileAvailable: IIsTileEnemyAvailable = (
+  enemyUuid: string,
+  direction: IPosition,
+  absolutePosition: IPosition,
+  physicsPosition: IPosition,
+  currentPosition: IPosition): boolean => {
+    let available = true
+
+  let physicCoordinate = game.getCoordinate(physicsPosition)
+
+  if (direction.x !== 0) {
+    let perfectY = isCenteredPosition(absolutePosition.y)
+    if (!perfectY) {
+      return false
+    }
+  } else {
+    let perfectX = isCenteredPosition(absolutePosition.x)
+    if (!perfectX) {
+      return false
+    }
+  }
+
+  physicCoordinate.forEach(tileId => {
+    let tile = getTileById(tileId)
+    if (tile) {
+      if (tile.physics) {
+        if (tile !== tiles.bomb) {
+          available = false;
+        } else if (physicsPosition.x !== currentPosition.x || physicsPosition.y !== currentPosition.y) {
+          available = false;
+        }
+        return;
+      } else if (tile.isEnemy) {
+        let enemies = enemyManager.getAllEnemies(physicsPosition, tileId)
+        if (enemies) {
+          let otherEnemy = enemies.find(enemy => enemy.uuid !== enemyUuid)
+          if (otherEnemy) {
+            enemyUuid
+            available = false;
+          }
+        }
+        return;
+      }
+    }
+  })
+
   return available;
 }

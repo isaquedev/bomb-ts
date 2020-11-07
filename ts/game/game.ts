@@ -59,9 +59,6 @@ const game: IGame = {
         let tile = getTileById(coordinate[z])
         if (tile.isEnemy) {
           let enemy = enemyManager.getEnemy(pos, tile.id)
-          if (enemy) {
-            // tile.color = enemy.color
-          }
           if (arrayContains<number>(coordinate, tiles.explosion.id)) {
             enemyManager.damage(enemy)
           }

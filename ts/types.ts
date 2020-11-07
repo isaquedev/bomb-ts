@@ -49,6 +49,17 @@ interface IPhysicsMove {
   ): IPositionMove
 }
 
+interface IPhysicsEnemyMove { 
+  (
+    enemyUuid: string,
+    coordinatePosition: IPosition,
+    direction: IPosition,
+    currentAbsolutePosition: IPosition,
+    nextAbsolutePosition: IPosition
+  ): IPositionMove
+}
+
+
 //tiles_config.ts
 interface ITileKeys {
   [key: string]: ITileItem
@@ -143,6 +154,7 @@ interface IPlayerActionStatus extends IPlayerActionStatusKey {
 
 interface IBaseEnemy {
   id: number;
+  uuid: string,
   hp: number;
   position: IPosition;
   absolutePosition: IPosition;
@@ -155,6 +167,7 @@ interface IBaseEnemy {
 interface IEnemyManager {
   enemies: Array<IBaseEnemy>;
   getEnemy: IEnemyManagerGetEnemy;
+  getAllEnemies: IEnemyManagerGetAllEnemy;
   skipCount: number;
   skipMax: number;
   start: Function;
@@ -164,12 +177,24 @@ interface IEnemyManager {
 
 interface IEnemyManagerGetEnemy { (pos: IPosition, tileId: number): IBaseEnemy }
 
+interface IEnemyManagerGetAllEnemy { (pos: IPosition, tileId: number): Array<IBaseEnemy> }
+
 interface IEnemyManagerDamage { (enemy: IBaseEnemy): void }
 
 //utils.ts
 interface IGetTileById { (tileId: number): ITileItem }
 
 interface IIsTileAvailable { (physicsPosition: IPosition, currentPosition: IPosition): boolean }
+
+interface IIsTileEnemyAvailable {
+  (
+    enemyId: string,
+    direction: IPosition,
+    absolutePosition: IPosition,
+    physicsPosition: IPosition,
+    currentPosition: IPosition
+  ): boolean
+}
 
 interface IIsTileExplosivable { (layer: Array<number>): boolean }
 

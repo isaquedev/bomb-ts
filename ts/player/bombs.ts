@@ -19,8 +19,8 @@ const bombManager: IBombManager = {
     //TODO add bombs in bombs array to explode bomb on explosion colid with them
     let explosion: Array<IPosition> = [{x: bomb.x, y: bomb.y}]
 
-    let bombZIndex = game.getCoordinate(bomb).indexOf(tiles.bomb.id)
-    game.getCoordinate(bomb)[bombZIndex] = tiles.explosion.id
+    let bombZIndex = game.getCoordinate({x: bomb.x, y: bomb.y}).indexOf(tiles.bomb.id)
+    game.getCoordinate({x: bomb.x, y: bomb.y})[bombZIndex] = tiles.explosion.id
     let directions = [
       { active: true, x: -1,  y: 0 },
       { active: true, x: 1,   y: 0 },

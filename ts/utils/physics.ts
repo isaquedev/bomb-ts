@@ -8,7 +8,7 @@ export const enemyFastMove = 7
 
 export const enemySlowMove = 9;
 
-export const tileSize = 46;
+export const tileSize = 48;
 
 interface IPhysicPositionFunction { 
   (

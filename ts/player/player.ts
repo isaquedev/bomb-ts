@@ -8,7 +8,7 @@ import { tileSize, playerSpeed, physicMove } from '../utils/physics.js'
 class Player implements IPlayer {
   public position: IPosition = {x: 1, y: 1}
   public absolutePosition: IPosition = {x: 0, y: 0}
-  public bomber: IBomber = {bombPower: 2, bombCount: 3}
+  public bomber: IBomber = {bombPower: 1, bombCount: 1}
 
   private skip = false;
   private hp = 1
@@ -117,7 +117,15 @@ class Player implements IPlayer {
     this.dead = false
     this.isInvulnerable = false
     this.hp = 1
+    this.bomber = {bombCount: 1, bombPower: 1}
     this.moveSpeed = tileSize / playerSpeed
+    this.actions.status = {
+      leaveBomb: false,
+      moveBot: false,
+      moveLeft: false,
+      moveRight: false,
+      moveTop: false
+    }
     game.forCoordinates(pos => {
       if (arrayContains<number>(game.getCoordinate(pos), tiles.player.id)) {
         this.position = pos
@@ -128,7 +136,7 @@ class Player implements IPlayer {
 
   public leaveBomb() {
     if (!this.actions.status.leaveBomb) return;
-    
+
     this.actions.status.leaveBomb = false
 
     if (this.bomber.bombCount == 0) return;

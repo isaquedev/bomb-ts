@@ -1,4 +1,4 @@
-public/*.js
-public/*.map
+*.js
+*.map
 node_modules
 package-lock.json

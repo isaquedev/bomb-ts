@@ -127,13 +127,17 @@ class Player implements IPlayer {
   }
 
   public leaveBomb() {
+    if (!this.actions.status.leaveBomb) return;
+    
+    this.actions.status.leaveBomb = false
+
     if (this.bomber.bombCount == 0) return;
 
     let pos = this.position
 
     let layer = game.getCoordinate(pos)
     let bomb = tiles.bomb
-    if (this.actions.status.leaveBomb && layer.indexOf(bomb.id) === -1) {
+    if (layer.indexOf(bomb.id) === -1) {
       let bombId = Math.random()
 
       this.bomber.bombCount -= 1;

@@ -4,7 +4,7 @@ import { getTileById } from "./utils.js";
 export const playerSpeed = 3;
 export const enemyFastMove = 7;
 export const enemySlowMove = 9;
-export const tileSize = 48;
+export const tileSize = 46;
 const physicPosition = (direction, currentCoordinatePos, nextAbsolutePosition) => {
     let physicPosition;
     let perfect = true;

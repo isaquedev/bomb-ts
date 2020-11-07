@@ -60,14 +60,11 @@ class Player implements IPlayer {
       this.shine = false
     }
 
-    // tiles.player.color = this.shine ? "LightCyan" : "blue"
-
     this.move()
     this.leaveBomb()
   }
 
   public damage() {
-    return;
     if (this.isInvulnerable || this.dead) return;
 
     if (this.hp > 1) {

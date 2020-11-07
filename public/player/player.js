@@ -62,7 +62,6 @@ class Player {
         this.leaveBomb();
     }
     damage() {
-        return;
         if (this.isInvulnerable || this.dead)
             return;
         if (this.hp > 1) {

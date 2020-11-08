@@ -51,9 +51,9 @@ const tiles: ITile = {
   },
   explosion: {
     id: 5,
-    animated: false,
+    animated: true,
     sprite: 'explosion',
-    frames: 0,
+    frames: 5,
     physics: false,
     explosivable: false,
     isPlayer: false,

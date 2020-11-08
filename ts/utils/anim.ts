@@ -24,7 +24,7 @@ class AnimObject implements IAnim {
         this.frame++
       }
       this.image = this.images[this.frame]
-    }, times.gameUpdate * 6)
+    }, times.gameUpdate * 5)
   }
 
 }

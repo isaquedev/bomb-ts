@@ -1,6 +1,5 @@
 import tiles from "../game/tiles.js";
 import AnimObject from "../utils/anim.js";
-import times from "../utils/times.js";
 
 class Bomb extends AnimObject implements IBomb {
 

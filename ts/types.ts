@@ -100,7 +100,8 @@ interface ITileItem {
 interface IBombManager {
   bombs: Array<IBomb>;
   getBombByCoordinate: IBombManagerByCoordinate;
-  explosion: Array<IPosition>;
+  getExplosionByCoordinate: IBombManagerExplosioByCoorindate
+  explosions: Array<IExplosion>;
   explosionIds: Array<number>;
   reset: Function;
   explode: IBombManagerExplode;
@@ -109,21 +110,28 @@ interface IBombManager {
 
 interface IBombManagerByCoordinate { (coordinate: IPosition):IBomb }
 
+interface IBombManagerExplosioByCoorindate { (coordinate: IPosition): IAnim }
+
 interface IBombManagerExplode {
   (id: number): void
 }
 
 interface IBombManagerClean {
-  (explosion: Array<IPosition>): void
+  (explosions: Array<IExplosion>): void
 }
 
-interface IBomb extends IAnim {
+interface IBomb {
   id: number;
   x: number;
   y: number;
   image: HTMLImageElement
   power: number;
   timeOut: number;
+}
+
+//explosion.ts
+interface IExplosion extends IAnim {
+  position: IPosition
 }
 
 //bombers files

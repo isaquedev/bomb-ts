@@ -82,6 +82,10 @@ const game: IGame = {
           let bomb = bombManager.getBombByCoordinate(pos)
           game.drawAnimation(toAbsoloutePosition(pos), bomb.image)
           continue
+        } else if (tile === tiles.explosion) {
+          let explosion = bombManager.getExplosionByCoordinate(pos);
+          game.drawAnimation(toAbsoloutePosition(pos), explosion.image)
+          continue;
         }
         game.drawTile(pos, tile)
       }

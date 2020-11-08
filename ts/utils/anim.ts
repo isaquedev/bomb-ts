@@ -41,7 +41,7 @@ class AnimObject implements IAnim {
         this.frame++
       }
       this.image = this.images[this.frame]
-    }, times.gameUpdate * 5)
+    }, times.gameObjectAnim)
   }
 
   public stopAnimation() {

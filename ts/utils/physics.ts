@@ -1,7 +1,7 @@
 import enemyManager from "../enemy/enemy_manager.js";
 import game from "../game/game.js";
 import tiles from "../game/tiles.js";
-import { getTileById } from "./utils.js";
+import { getTileById, roundToFixed } from "./utils.js";
 
 export const playerSpeed = 5;
 
@@ -34,12 +34,13 @@ const physicPosition: IPhysicPositionFunction = (
   ) => {
     let physicPosition: number
     let perfect = true
+    let nextAproximatedAbsolutePosition = parseFloat(nextAbsolutePosition.toFixed(2))
     if (direction > 0) {
       physicPosition = Math.ceil(parseFloat((nextAbsolutePosition / game.tileSize).toFixed(2)))
     } else if (direction < 0) {
       physicPosition = Math.floor(parseFloat((nextAbsolutePosition / game.tileSize).toFixed(2)))
     } else {
-      perfect = isCenteredPosition(nextAbsolutePosition)
+      perfect = isCenteredPosition(nextAproximatedAbsolutePosition)
       physicPosition = currentCoordinatePos
     }
 
@@ -66,24 +67,27 @@ const physicAdjustAbsolutePosition: IPhysicAdjustAbsolutePosition = (
 ) => {
   if (!perfect) {
     let moveToOrigin: boolean
-    let realCoordinateX = position.absolutePostion[selectedPosition] / game.tileSize
+    let realCoordinate = roundToFixed(position.absolutePostion[selectedPosition] / game.tileSize, 1)
     if (position.physicalValid) {
-      if (realCoordinateX > position.coordinatePosition[selectedPosition]) {
+      if (realCoordinate > position.coordinatePosition[selectedPosition]) {
         moveToOrigin = true
       } else {
         moveToOrigin = false
       }
     } else {
-      if (realCoordinateX > position.coordinatePosition[selectedPosition]) {
-        physicResult[selectedPosition]++
-        position.coordinatePosition[selectedPosition]++
-        moveToOrigin = false
-        position.physicalValid = isTileAvailable(physicResult, position.coordinatePosition)
-      } else {
-        physicResult[selectedPosition]--
-        position.coordinatePosition[selectedPosition]--
-        moveToOrigin = true
-        position.physicalValid = isTileAvailable(physicResult, position.coordinatePosition)
+      let dist = Math.abs(roundToFixed(realCoordinate - position.coordinatePosition[selectedPosition], 1))
+      if (dist >= 0.4) {
+        if (realCoordinate > position.coordinatePosition[selectedPosition]) {
+          physicResult[selectedPosition]++
+            position.coordinatePosition[selectedPosition]++
+            moveToOrigin = false
+            position.physicalValid = isTileAvailable(physicResult, position.coordinatePosition)
+        } else if (realCoordinate < position.coordinatePosition[selectedPosition]) {
+          physicResult[selectedPosition]--
+            position.coordinatePosition[selectedPosition]--
+            moveToOrigin = true
+            position.physicalValid = isTileAvailable(physicResult, position.coordinatePosition)
+        }
       }
     }
 

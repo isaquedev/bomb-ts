@@ -228,6 +228,9 @@ interface IArrayContains { <T>(array: Array<T>, value: T): boolean }
 //times.ts
 interface ITimes {
   gameUpdate: number,
+  gameUpdateMove: number
+  gameUpdateMoveAnim: number,
+  gameObjectAnim: number,
   invulnerability: number,
   bombDelayToExplode: number,
   explosionDuration: number,

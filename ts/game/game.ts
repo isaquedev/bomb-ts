@@ -67,8 +67,9 @@ const game: IGame = {
           if (arrayContains<number>(coordinate, tiles.explosion.id)) {
             enemyManager.damage(enemy)
           }
-          game.drawSprite(enemy.absolutePosition, makeImage(tiles.enemySimpleMove.sprite))
-          continue
+          if (enemy) {
+            game.drawSprite(enemy.absolutePosition, makeImage(tiles.enemySimpleMove.sprite))
+          }
         } else if (tile.isPlayer) {
           let enemy = game.getCoordinate(pos).find(id => {
             let tile = getTileById(id)
@@ -78,18 +79,15 @@ const game: IGame = {
             player.damage()
           }
           game.drawSprite(player.absolutePosition, player.image)
-          continue
         } else if (tile === tiles.bomb) {
           let bomb = bombManager.getBombByCoordinate(pos)
           game.drawSprite(toAbsoloutePosition(pos), bomb.image)
-          continue
         } else if (tile === tiles.explosion) {
           if (!isTileDestructive(coordinate)) {
             let explosion = bombManager.getExplosionByCoordinate(pos);
             if (explosion) {
               game.drawSprite(toAbsoloutePosition(pos), explosion.image)
             }
-            continue;
           }
         }
       }

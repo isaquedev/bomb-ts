@@ -95,3 +95,7 @@ export const makeImage: IMakeImage = (sprite: string): HTMLImageElement => {
   image.src = "../resources/images/" + sprite + ".png"
   return image
 }
+
+export const roundToFixed = (number: number, fixed: number): number => {
+  return parseFloat((number).toFixed(fixed))
+}

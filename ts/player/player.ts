@@ -92,11 +92,11 @@ class Player implements IPlayer {
         this.frame++
       }
       this.image = this.directionToImages()[this.frame]
-    }, times.gameUpdate * 2)
+    }, times.gameUpdateMoveAnim)
 
     setInterval(() => {
       this.move()
-    }, times.gameUpdate * 3)
+    }, times.gameUpdateMove)
   }
 
   private directionToImages(): Array<HTMLImageElement> {

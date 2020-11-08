@@ -2,6 +2,7 @@ import game from "../game/game.js";
 import times from "../utils/times.js";
 import { enemySlowMove, physicEnemyMove, isTileEnemyIIsTileAvailable } from '../utils/physics.js';
 import { random, toAbsoloutePosition } from "../utils/utils.js";
+import EnemyNestedMove from './enemy_nested_move.js';
 
 abstract class BaseEnemy implements IBaseEnemy {
   public id = 0;
@@ -28,17 +29,6 @@ abstract class BaseEnemy implements IBaseEnemy {
   protected abstract setId(): void
 
   public update(skipFrame: boolean) {
-    if (this.hp === 0) {
-      this.shine = false;
-      return;
-    }
-
-    if (this.isInvulnerable) {
-      this.shine = !this.shine;
-    } else {
-      this.shine = false
-    }
-
     if (!skipFrame) {
       this.moveEnemy()
     }
@@ -86,7 +76,7 @@ abstract class BaseEnemy implements IBaseEnemy {
       game.getCoordinate(this.position).splice(enemyIndex, 1)
       this.position = physicsResult.coordinatePosition
       this.absolutePosition = physicsResult.absolutePostion
-      game.getCoordinate(this.position).splice(0, 0, this.id)
+      game.getCoordinate(this.position).push(this.id)
     }
   }
 
@@ -105,12 +95,12 @@ abstract class BaseEnemy implements IBaseEnemy {
 
   public damage() {
     if (this.isInvulnerable) return;
+    
     this.hp -= 1;
     if (this.hp > 0) {
       this.isInvulnerable = true;
       setTimeout(() => this.isInvulnerable = false, times.invulnerability)
     } else {
-      //TODO enemy death animation
       let enemyIndex = game.getCoordinate(this.position).indexOf(this.id)
       game.getCoordinate(this.position).splice(enemyIndex, 1)
     }

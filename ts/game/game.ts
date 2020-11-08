@@ -86,7 +86,9 @@ const game: IGame = {
         } else if (tile === tiles.explosion) {
           if (!isTileDestructive(coordinate)) {
             let explosion = bombManager.getExplosionByCoordinate(pos);
-            game.drawAnimation(toAbsoloutePosition(pos), explosion.image)
+            if (explosion) {
+              game.drawAnimation(toAbsoloutePosition(pos), explosion.image)
+            }
             continue;
           }
         }

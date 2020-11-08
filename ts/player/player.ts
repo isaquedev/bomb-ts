@@ -1,9 +1,10 @@
 import game from "../game/game.js"
-import { arrayContains } from '../utils/utils.js';
+import { arrayContains, toAbsoloutePosition } from '../utils/utils.js';
 import tiles from '../game/tiles.js';
 import bombManager from './bombs.js';
 import times from '../utils/times.js';
 import { playerSpeed, physicMove } from '../utils/physics.js'
+import Bomb from "./bomb.js";
 
 class Player implements IPlayer {
   public position: IPosition = {x: 1, y: 1}
@@ -134,7 +135,7 @@ class Player implements IPlayer {
     game.forCoordinates(pos => {
       if (arrayContains<number>(game.getCoordinate(pos), tiles.player.id)) {
         this.position = pos
-        this.absolutePosition = game.coordinateToAbsolute(pos)
+        this.absolutePosition = toAbsoloutePosition(pos)
         this.absoluteCoordinatePosition = pos
       }
     })
@@ -156,13 +157,9 @@ class Player implements IPlayer {
 
       this.bomber.bombCount -= 1;
 
-      bombManager.bombs.push({
-        id: bombId,
-        x: pos.x,
-        y: pos.y,
-        power: this.bomber.bombPower,
-        timeOut: setTimeout(() => bombManager.explode(bombId), times.bombDelayToExplode)
-      })
+      bombManager.bombs.push(new Bomb(
+        bombId, pos.x, pos.y, this.bomber.bombPower,
+        setTimeout(() => bombManager.explode(bombId), times.bombDelayToExplode)))
 
       layer.splice(0, 0, bomb.id)
     }

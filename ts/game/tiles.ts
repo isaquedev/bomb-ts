@@ -1,7 +1,9 @@
 const tiles: ITile = {
   ground :{
     id: 0,
+    animated: false,
     sprite: 'grass',
+    frames: 0,
     physics: false,
     explosivable: false,
     isPlayer: false,
@@ -9,7 +11,9 @@ const tiles: ITile = {
   },
   player: {
     id: 1,
+    animated: false,
     sprite: 'player',
+    frames: 0,
     physics: false,
     explosivable: false,
     isPlayer: true,
@@ -17,7 +21,9 @@ const tiles: ITile = {
   },
   wall: {
     id: 2,
+    animated: false,
     sprite: 'wall',
+    frames: 0,
     physics: true,
     explosivable: false,
     isPlayer: false,
@@ -25,7 +31,9 @@ const tiles: ITile = {
   },
   box: {
     id: 3,
+    animated: false,
     sprite: 'box',
+    frames: 0,
     physics: true,
     explosivable: true,
     isPlayer: false,
@@ -33,7 +41,9 @@ const tiles: ITile = {
   },
   bomb: {
     id: 4,
+    animated: true,
     sprite: 'bomb',
+    frames: 3,
     physics: true,
     explosivable: false,
     isPlayer: false,
@@ -41,7 +51,9 @@ const tiles: ITile = {
   },
   explosion: {
     id: 5,
+    animated: false,
     sprite: 'explosion',
+    frames: 0,
     physics: false,
     explosivable: false,
     isPlayer: false,
@@ -49,7 +61,9 @@ const tiles: ITile = {
   },
   enemySimpleMove: {
     id: 6,
+    animated: false,
     sprite: 'enemy',
+    frames: 0,
     physics: false,
     explosivable: false,
     isPlayer: false,
@@ -57,7 +71,9 @@ const tiles: ITile = {
   },
   enemyNestedMove: {
     id: 7,
+    animated: false,
     sprite: 'enemy',
+    frames: 0,
     physics: false,
     explosivable: false,
     isPlayer: false,

@@ -13,7 +13,6 @@ class EnemyNestedMove extends BaseEnemy {
 
   protected startEnemy(): void {
     this.hp = 2
-    this.colors = {default: "Teal", damage: "PaleTurquoise"}
   }
 
   protected setId(): void {

@@ -15,6 +15,12 @@ export const getTileById: IGetTileById = (tileId: number): ITileItem => {
   return tile;
 }
 
+interface IToAbsolutePosition { (coordinate: IPosition): IPosition }
+
+export const toAbsoloutePosition: IToAbsolutePosition = (coordinate: IPosition): IPosition => {
+  return {x: coordinate.x * game.tileSize, y: coordinate.y * game.tileSize};
+}
+
 export const isTileExplosivable: IIsTileExplosivable = (layer: Array<number>): boolean => {
   let explosivable = true
   layer.forEach(tileId => {

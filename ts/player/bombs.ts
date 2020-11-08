@@ -6,6 +6,10 @@ import times from '../utils/times.js';
 
 const bombManager: IBombManager = {
   bombs: [],
+  getBombByCoordinate: (coordinate: IPosition) => {
+    return bombManager.bombs.find(bomb => bomb.x === coordinate.x
+                                          && bomb.y === coordinate.y)
+  },
   explosion: [],
   explosionIds: [],
   explode: (id: number) => {

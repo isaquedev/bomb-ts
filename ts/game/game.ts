@@ -1,7 +1,7 @@
 import tiles from './tiles.js';
 import { fase1 } from './scenarios.js';
 import player from '../player/player.js';
-import { getTileById, arrayContains } from '../utils/utils.js'
+import { getTileById, arrayContains, toAbsoloutePosition } from '../utils/utils.js'
 import enemyManager from '../enemy/enemy_manager.js';
 import bombManager from '../player/bombs.js';
 import times from '../utils/times.js'
@@ -9,6 +9,7 @@ import times from '../utils/times.js'
 const gameResize = () => {
   const canvas = document.getElementById("app_canvas") as HTMLCanvasElement
   game.context = canvas.getContext('2d');
+  game.context.imageSmoothingEnabled = true
 
   let width = window.innerWidth
   let height = window.innerHeight
@@ -27,14 +28,12 @@ const gameResize = () => {
 
 const game: IGame = {
   context: null,
+  frame: 0,
   scenario: [],
   tileSize: 48,
   updaterId: 0,
   reseting: false,
   getCoordinate: (pos: IPosition) => game.scenario[pos.y][pos.x],
-  coordinateToAbsolute: (pos: IPosition) => {
-    return {x: pos.x * game.tileSize, y: pos.y * game.tileSize};
-  },
   forCoordinates: (doOnCoordinate: IPositionFunction) => {
     for (let y = 0; y < game.scenario.length; y++) {
       for (let x = 0; x < game.scenario[y].length; x++) {
@@ -45,11 +44,16 @@ const game: IGame = {
   start: () => {
     game.reset()
     player.start()
-
     // window.addEventListener("resize", () => gameResize());
   },
   update: () => {
     if (game.reseting) return;
+
+    if (game.frame === 99) {
+      game.frame = 0
+    } else {
+      game.frame++
+    }
 
     game.forCoordinates(pos => game.drawTile(pos, tiles.ground))
 
@@ -73,6 +77,10 @@ const game: IGame = {
             player.damage()
           }
           game.drawSprite(player.absolutePosition, tiles.player.sprite)
+          continue
+        } else if (tile === tiles.bomb) {
+          let bomb = bombManager.getBombByCoordinate(pos)
+          game.drawAnimation(toAbsoloutePosition(pos), bomb.image)
           continue
         }
         game.drawTile(pos, tile)
@@ -104,14 +112,15 @@ const game: IGame = {
     game.reseting = false;
   },
   drawTile: (pos: IPosition, tile: ITileItem) => {
-    let posX = pos.x * game.tileSize
-    let posY = pos.y * game.tileSize
-
-    game.drawSprite({x: posX, y: posY}, tile.sprite)
+    let position = toAbsoloutePosition(pos)
+    game.drawSprite(position, tile.sprite)
   },
   drawSprite: (pos: IPosition, sprite: string) => {
     let image = new Image()
     image.src = "./resources/images/" + sprite + ".png"
+    game.context.drawImage(image, pos.x, pos.y, game.tileSize, game.tileSize)
+  },
+  drawAnimation: (pos: IPosition, image: HTMLImageElement) => {
     game.context.drawImage(image, pos.x, pos.y, game.tileSize, game.tileSize)
   }
 }

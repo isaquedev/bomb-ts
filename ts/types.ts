@@ -11,26 +11,35 @@ interface IPositionMove {
   physicalValid: boolean;
 }
 
+interface IAnim {
+  frame: number;
+  image: HTMLImageElement
+  images: Array<HTMLImageElement>
+}
+
 //game.ts
 interface IGame {
   context: CanvasRenderingContext2D;
+  frame: number;
   tileSize: number;
   updaterId: number;
   reseting: boolean;
   getCoordinate: IGameCoordinate;
   forCoordinates: IGameForCoordinates;
-  coordinateToAbsolute: IGamePosCoordinate;
   start: Function;
   update: Function;
   reset: Function;
   drawTile: IGameTile;
   drawSprite: IGameSprite;
+  drawAnimation: IGameAnimation
   scenario: Array<Array<Array<number>>>;
 }
 
 interface IGameTile { (pos: IPosition, tile: ITileItem): void }
 
 interface IGameSprite { (pos: IPosition, sprite: string): void }
+
+interface IGameAnimation { (pos: IPosition, image: HTMLImageElement): void }
 
 interface IGameCoordinate { (pos: IPosition): Array<number> }
 
@@ -78,7 +87,9 @@ interface ITile extends ITileKeys {
 
 interface ITileItem {
   id: number;
+  animated: boolean;
   sprite: string;
+  frames: number;
   physics: boolean;
   explosivable: boolean;
   isPlayer: boolean;
@@ -88,12 +99,15 @@ interface ITileItem {
 //bombs.ts
 interface IBombManager {
   bombs: Array<IBomb>;
+  getBombByCoordinate: IBombManagerByCoordinate;
   explosion: Array<IPosition>;
   explosionIds: Array<number>;
   reset: Function;
   explode: IBombManagerExplode;
   clean: IBombManagerClean;
 }
+
+interface IBombManagerByCoordinate { (coordinate: IPosition):IBomb }
 
 interface IBombManagerExplode {
   (id: number): void
@@ -103,10 +117,11 @@ interface IBombManagerClean {
   (explosion: Array<IPosition>): void
 }
 
-interface IBomb {
+interface IBomb extends IAnim {
   id: number;
   x: number;
   y: number;
+  image: HTMLImageElement
   power: number;
   timeOut: number;
 }
@@ -158,7 +173,6 @@ interface IBaseEnemy {
   hp: number;
   position: IPosition;
   absolutePosition: IPosition;
-  color: string
   start: Function;
   update: Function;
   damage: Function;

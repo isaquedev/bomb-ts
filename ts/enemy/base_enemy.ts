@@ -1,7 +1,7 @@
 import game from "../game/game.js";
 import times from "../utils/times.js";
 import { enemySlowMove, physicEnemyMove, isTileEnemyIIsTileAvailable } from '../utils/physics.js';
-import { random } from "../utils/utils.js";
+import { random, toAbsoloutePosition } from "../utils/utils.js";
 
 abstract class BaseEnemy implements IBaseEnemy {
   public id = 0;
@@ -9,8 +9,6 @@ abstract class BaseEnemy implements IBaseEnemy {
   public hp = 1;
   public position: IPosition;
   public absolutePosition: IPosition;
-  public color = "red";
-  public colors = { default: "red", damage: "MistyRose" }
 
   protected direction: IPosition = {x: 0, y: 0}
   private isInvulnerable = false;
@@ -19,7 +17,7 @@ abstract class BaseEnemy implements IBaseEnemy {
   public start(pos: IPosition) {
     this.uuid = Math.random().toFixed(4) + Math.random().toFixed(4)
     this.position = pos
-    this.absolutePosition = {x: pos.x * game.tileSize, y: pos.y * game.tileSize}
+    this.absolutePosition = toAbsoloutePosition(pos)
     this.randomAvailableDirection()
     this.startEnemy()
     this.setId()
@@ -32,7 +30,6 @@ abstract class BaseEnemy implements IBaseEnemy {
   public update(skipFrame: boolean) {
     if (this.hp === 0) {
       this.shine = false;
-      this.color = this.colors.default
       return;
     }
 
@@ -41,8 +38,6 @@ abstract class BaseEnemy implements IBaseEnemy {
     } else {
       this.shine = false
     }
-
-    this.color = this.shine ? this.colors.damage : this.colors.default
 
     if (!skipFrame) {
       this.moveEnemy()

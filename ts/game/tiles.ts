@@ -31,9 +31,9 @@ const tiles: ITile = {
   },
   box: {
     id: 3,
-    animated: false,
+    animated: true,
     sprite: 'box',
-    frames: 0,
+    frames: 6,
     physics: true,
     explosivable: true,
     isPlayer: false,

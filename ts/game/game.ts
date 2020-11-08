@@ -1,10 +1,11 @@
 import tiles from './tiles.js';
 import { fase1 } from './scenarios.js';
 import player from '../player/player.js';
-import { getTileById, arrayContains, toAbsoloutePosition } from '../utils/utils.js'
+import { getTileById, arrayContains, toAbsoloutePosition, makeImage, isTileDestructive } from '../utils/utils.js'
 import enemyManager from '../enemy/enemy_manager.js';
 import bombManager from '../player/bombs.js';
 import times from '../utils/times.js'
+import AnimObject from '../utils/anim.js';
 
 const gameResize = () => {
   const canvas = document.getElementById("app_canvas") as HTMLCanvasElement
@@ -28,11 +29,12 @@ const gameResize = () => {
 
 const game: IGame = {
   context: null,
-  frame: 0,
   scenario: [],
+  scenarioBuffer: [],
   tileSize: 48,
   updaterId: 0,
   reseting: false,
+  firstDraw: true,
   getCoordinate: (pos: IPosition) => game.scenario[pos.y][pos.x],
   forCoordinates: (doOnCoordinate: IPositionFunction) => {
     for (let y = 0; y < game.scenario.length; y++) {
@@ -49,13 +51,12 @@ const game: IGame = {
   update: () => {
     if (game.reseting) return;
 
-    if (game.frame === 99) {
-      game.frame = 0
-    } else {
-      game.frame++
-    }
-
-    game.forCoordinates(pos => game.drawTile(pos, tiles.ground))
+    game.forCoordinates(pos => {
+      let bufferZ = game.scenarioBuffer[pos.y][pos.x]
+      for (let z = 0; z < bufferZ.length; z++) {
+        game.drawSprite(toAbsoloutePosition(pos), game.scenarioBuffer[pos.y][pos.x][z].image)
+      }
+    })
 
     game.forCoordinates(pos => {
       let coordinate = game.getCoordinate(pos)
@@ -66,7 +67,7 @@ const game: IGame = {
           if (arrayContains<number>(coordinate, tiles.explosion.id)) {
             enemyManager.damage(enemy)
           }
-          game.drawSprite(enemy.absolutePosition, tiles.enemySimpleMove.sprite)
+          game.drawSprite(enemy.absolutePosition, makeImage(tiles.enemySimpleMove.sprite))
           continue
         } else if (tile.isPlayer) {
           let enemy = game.getCoordinate(pos).find(id => {
@@ -76,23 +77,18 @@ const game: IGame = {
           if (arrayContains<number>(coordinate, tiles.explosion.id) || enemy) {
             player.damage()
           }
-          game.drawSprite(player.absolutePosition, tiles.player.sprite)
+          game.drawSprite(player.absolutePosition, makeImage(tiles.player.sprite))
           continue
         } else if (tile === tiles.bomb) {
           let bomb = bombManager.getBombByCoordinate(pos)
           game.drawAnimation(toAbsoloutePosition(pos), bomb.image)
           continue
         } else if (tile === tiles.explosion) {
-          let explosion = bombManager.getExplosionByCoordinate(pos);
-          game.drawAnimation(toAbsoloutePosition(pos), explosion.image)
-          continue;
-        }
-        game.drawTile(pos, tile)
-      }
-      if (arrayContains<number>(coordinate, tiles.player.id)) {
-        if (arrayContains<number>(coordinate, tiles.explosion.id)
-            || arrayContains<number>(coordinate, tiles.enemySimpleMove.id)) {
-          player.damage()
+          if (!isTileDestructive(coordinate)) {
+            let explosion = bombManager.getExplosionByCoordinate(pos);
+            game.drawAnimation(toAbsoloutePosition(pos), explosion.image)
+            continue;
+          }
         }
       }
     })
@@ -105,7 +101,21 @@ const game: IGame = {
     clearInterval(game.updaterId)
     bombManager.reset()
 
+    game.firstDraw = true
     game.scenario = JSON.parse(JSON.stringify(fase1))
+    game.scenarioBuffer = []
+
+    for (let y = 0; y < game.scenario.length; y++) {
+      game.scenarioBuffer.push([])
+      for (let x = 0; x < game.scenario[0].length; x++) {
+        game.scenarioBuffer[y].push([new AnimObject(tiles.ground.sprite, 0, false)])
+        let coordinate = game.getCoordinate({x: x, y: y})
+        let tile = getTileById(coordinate[0])
+        if (tile === tiles.wall || tile === tiles.box) {
+          game.scenarioBuffer[y][x].push(new AnimObject(tile.sprite, tile.frames, false))
+        }
+      }
+    }
 
     gameResize()
 
@@ -115,13 +125,7 @@ const game: IGame = {
     game.updaterId = setInterval(game.update, times.gameUpdate)
     game.reseting = false;
   },
-  drawTile: (pos: IPosition, tile: ITileItem) => {
-    let position = toAbsoloutePosition(pos)
-    game.drawSprite(position, tile.sprite)
-  },
-  drawSprite: (pos: IPosition, sprite: string) => {
-    let image = new Image()
-    image.src = "./resources/images/" + sprite + ".png"
+  drawSprite: (pos: IPosition, image: HTMLImageElement) => {
     game.context.drawImage(image, pos.x, pos.y, game.tileSize, game.tileSize)
   },
   drawAnimation: (pos: IPosition, image: HTMLImageElement) => {

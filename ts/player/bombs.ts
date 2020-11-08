@@ -1,7 +1,7 @@
 import game from "../game/game.js"
 import player from "./player.js"
 import tiles from "../game/tiles.js"
-import { getLayer, isTileExplosivable, isTileDestructive, arrayContains } from '../utils/utils.js'
+import { getLayer, isTileExplosivable, isTileDestructive, indexOfDestructibleTile, arrayContains } from '../utils/utils.js'
 import times from '../utils/times.js';
 import Explosion from './explosion.js';
 
@@ -51,6 +51,8 @@ const bombManager: IBombManager = {
               directions[direction].active = false
               foundedBombs.push(bombManager.bombs.find(bomb => bomb.x == newPos.x && bomb.y == newPos.y))
             } else if (isTileDestructive(layer)) {
+              let index = indexOfDestructibleTile(layer)
+              game.scenarioBuffer[newPos.y][newPos.x][index].startAnimation()
               directions[direction].active = false
             }
           } else {
@@ -82,6 +84,7 @@ const bombManager: IBombManager = {
       game.getCoordinate(explosion.position).splice(0, 1) //TODO migrate to remote first explosion sprite
       if (isTileDestructive(game.getCoordinate(explosion.position))) {
         game.getCoordinate(explosion.position).splice(0, 1) //TODO migrate to remove first box sprite
+        game.scenarioBuffer[explosion.position.y][explosion.position.x].splice(1,1)
       }
     }
   }

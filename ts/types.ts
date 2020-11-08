@@ -15,12 +15,13 @@ interface IAnim {
   frame: number;
   image: HTMLImageElement
   images: Array<HTMLImageElement>
+  startAnimation: Function;
 }
 
 //game.ts
 interface IGame {
   context: CanvasRenderingContext2D;
-  frame: number;
+  firstDraw: boolean;
   tileSize: number;
   updaterId: number;
   reseting: boolean;
@@ -29,15 +30,13 @@ interface IGame {
   start: Function;
   update: Function;
   reset: Function;
-  drawTile: IGameTile;
   drawSprite: IGameSprite;
   drawAnimation: IGameAnimation
   scenario: Array<Array<Array<number>>>;
+  scenarioBuffer: Array<Array<Array<IAnim>>>;
 }
 
-interface IGameTile { (pos: IPosition, tile: ITileItem): void }
-
-interface IGameSprite { (pos: IPosition, sprite: string): void }
+interface IGameSprite { (pos: IPosition, image: HTMLImageElement): void }
 
 interface IGameAnimation { (pos: IPosition, image: HTMLImageElement): void }
 
@@ -218,9 +217,9 @@ interface IIsTileEnemyAvailable {
   ): boolean
 }
 
-interface IIsTileExplosivable { (layer: Array<number>): boolean }
+interface IIsTile { (layer: Array<number>): boolean }
 
-interface IIsTileDestructive { (layer: Array<number>): boolean }
+interface IIndexOfDestructibleTile { (layer: Array<number>): number }
 
 interface IGetLayer { (pos: IPosition): Array<number> }
 

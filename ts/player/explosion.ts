@@ -6,7 +6,7 @@ class Explosion extends AnimObject implements IExplosion {
   public position: IPosition;
 
   constructor(position: IPosition) {
-    super(tiles.explosion.sprite, tiles.explosion.frames)
+    super(tiles.explosion.sprite, tiles.explosion.frames, true)
     this.position = position
   }
 

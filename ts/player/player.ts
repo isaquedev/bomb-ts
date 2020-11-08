@@ -161,7 +161,7 @@ class Player implements IPlayer {
         bombId, pos.x, pos.y, this.bomber.bombPower,
         setTimeout(() => bombManager.explode(bombId), times.bombDelayToExplode)))
 
-      layer.splice(0, 0, bomb.id)
+      layer.unshift(bomb.id)
     }
   }
 

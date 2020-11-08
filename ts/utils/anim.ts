@@ -2,21 +2,36 @@ import times from "./times.js";
 
 class AnimObject implements IAnim {
   public frame: number;
+  public anim: boolean
   public image: HTMLImageElement
   public images: Array<HTMLImageElement>
   public maxFrames: number;
 
-  constructor(folder: string, maxFrames: number) {
+  constructor(folder: string, maxFrames: number, anim: boolean) {
     this.frame = 0
     this.maxFrames = maxFrames
-    let images: Array<HTMLImageElement> = []
-    for (let i = 0; i < maxFrames; i++) {
+
+    if (maxFrames === 0) {
       let image = new Image()
-      image.src = "../resources/animations/" + folder + "/" + i + ".png"
-      images.push(image)
+      image.src = "../resources/images/" + folder + ".png"
+      this.image = image
+    } else {
+      let images: Array<HTMLImageElement> = []
+      for (let i = 0; i < maxFrames; i++) {
+        let image = new Image()
+        image.src = "../resources/animations/" + folder + "/" + i + ".png"
+        images.push(image)
+      }
+      this.image = images[0]
+      this.images = images
     }
-    this.image = images[0]
-    this.images = images
+
+    if (anim) {
+      this.startAnimation()
+    }
+  }
+
+  public startAnimation() {
     setInterval(() => {
       if (this.frame === this.maxFrames - 1) {
         this.frame = 0

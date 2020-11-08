@@ -10,7 +10,7 @@ class Bomb extends AnimObject implements IBomb {
   public timeOut: number;
 
   constructor(id: number, x:number, y:number, power: number, timeOut: number) {
-    super(tiles.bomb.sprite, tiles.bomb.frames)
+    super(tiles.bomb.sprite, tiles.bomb.frames, true)
     this.id = id
     this.x = x
     this.y = y

@@ -21,7 +21,7 @@ export const toAbsoloutePosition: IToAbsolutePosition = (coordinate: IPosition):
   return {x: coordinate.x * game.tileSize, y: coordinate.y * game.tileSize};
 }
 
-export const isTileExplosivable: IIsTileExplosivable = (layer: Array<number>): boolean => {
+export const isTileExplosivable: IIsTile = (layer: Array<number>): boolean => {
   let explosivable = true
   layer.forEach(tileId => {
     let tile = getTileById(tileId)
@@ -35,7 +35,7 @@ export const isTileExplosivable: IIsTileExplosivable = (layer: Array<number>): b
   return explosivable
 }
 
-export const isTileDestructive: IIsTileDestructive = (layer: Array<number>): boolean => {
+export const isTileDestructive: IIsTile = (layer: Array<number>): boolean => {
   let explosivable = false
   layer.forEach(tileId => {
     let tile = getTileById(tileId)
@@ -48,6 +48,21 @@ export const isTileDestructive: IIsTileDestructive = (layer: Array<number>): boo
     }
   })
   return explosivable
+}
+
+export const indexOfDestructibleTile: IIndexOfDestructibleTile = (layer: Array<number>): number => {
+  let index = -1
+  layer.forEach((tileId, tileIndex) => {
+    let tile = getTileById(tileId)
+    //TODO bomba precisa não ser atravessável e precisa ser acionada pela explosão
+    if (tile) {
+      if (tile.explosivable) {
+        index = tileIndex;
+        return;
+      }
+    }
+  })
+  return index
 }
 
 export const getLayer: IGetLayer = (pos: IPosition): Array<number> => {
@@ -69,4 +84,14 @@ interface IRandom { (min: number, max: number): number }
 
 export const random: IRandom = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+interface IMakeImage {
+  (sprite: string): HTMLImageElement
+}
+
+export const makeImage: IMakeImage = (sprite: string): HTMLImageElement => {
+  let image = new Image()
+  image.src = "../resources/images/" + sprite + ".png"
+  return image
 }

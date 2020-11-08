@@ -1,5 +1,5 @@
 const times: ITimes = {
-  gameUpdate: 30,
+  gameUpdate: 1000 / 60,
   invulnerability: 751,
   bombDelayToExplode: 1500,
   explosionDuration: 750

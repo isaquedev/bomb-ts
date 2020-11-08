@@ -16,6 +16,7 @@ interface IAnim {
   image: HTMLImageElement
   images: Array<HTMLImageElement>
   startAnimation: Function;
+  stopAnimation: Function;
 }
 
 //game.ts
@@ -31,7 +32,6 @@ interface IGame {
   update: Function;
   reset: Function;
   drawSprite: IGameSprite;
-  drawAnimation: IGameAnimation
   scenario: Array<Array<Array<number>>>;
   scenarioBuffer: Array<Array<Array<IAnim>>>;
 }

@@ -69,10 +69,15 @@ const bombManager: IBombManager = {
     bombManager.explosionIds.push(explosionId)
   },
   reset: () => {
+    bombManager.bombs.forEach(bomb => clearTimeout(bomb.timeOut))
     bombManager.explosionIds.forEach(id => clearTimeout(id))
     bombManager.explosions.forEach(explosion => {
+      explosion.stopAnimation()
       game.getCoordinate(explosion.position).splice(0, 1)
     })
+    bombManager.bombs = []
+    bombManager.explosions = []
+    bombManager.explosionIds = []
   },
   clean: (explosions: Array<IExplosion>) => {
     for (let i = 0; i < explosions.length; i++) {

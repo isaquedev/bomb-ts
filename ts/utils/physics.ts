@@ -3,7 +3,7 @@ import game from "../game/game.js";
 import tiles from "../game/tiles.js";
 import { getTileById } from "./utils.js";
 
-export const playerSpeed = 3;
+export const playerSpeed = 5;
 
 export const enemyFastMove = 7
 

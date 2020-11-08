@@ -6,18 +6,40 @@ import times from '../utils/times.js';
 import { playerSpeed, physicMove } from '../utils/physics.js'
 import Bomb from "./bomb.js";
 
+interface IAnimDirections {
+  [key: string]: Array<HTMLImageElement>
+  left: Array<HTMLImageElement>;
+  right: Array<HTMLImageElement>
+  top: Array<HTMLImageElement>
+  bot: Array<HTMLImageElement> 
+}
+
 class Player implements IPlayer {
   public position: IPosition = {x: 1, y: 1}
   public absoluteCoordinatePosition: IPosition = {x: 0, y: 0}
   public absolutePosition: IPosition = {x: 0, y: 0}
   public bomber: IBomber = {bombPower: 1, bombCount: 1}
 
+  public image: HTMLImageElement
+  public images: IAnimDirections = {
+    left: [],
+    right: [],
+    top: [],
+    bot: []
+  }
+  public direction: IPosition
+  public frame = 0
+  private maxFrames = 8
+  public moving = false
+
+  private moveId = 0
+
   private skip = false;
   private hp = 1
   private dead = false
   private isInvulnerable = false
   private shine = false
-  private moveSpeed = 4
+  private moveSpeed: number
   private actions: IPlayerActions = {
     keyCodes: [
       { key: 87, name: 'moveTop' },
@@ -48,6 +70,47 @@ class Player implements IPlayer {
         this.actions.status[action.name] = false
       }
     });
+
+    let folder = "../resources/animations/player"
+
+    for (let i = 0; i < this.maxFrames; i++) {
+      Object.keys(this.images).forEach(dir => {
+        let image = new Image()
+        image.src = folder + "/" + dir +  "/" + i + ".png"
+        this.images[dir].push(image)
+      })
+    }
+
+    this.image = this.images.bot[0]
+
+    setInterval(() => {
+      if (!this.moving) {
+        this.frame = 0
+      } else if (this.frame === this.maxFrames - 1) {
+        this.frame = 0
+      } else {
+        this.frame++
+      }
+      this.image = this.directionToImages()[this.frame]
+    }, times.gameUpdate * 2)
+
+    setInterval(() => {
+      this.move()
+    }, times.gameUpdate * 3)
+  }
+
+  private directionToImages(): Array<HTMLImageElement> {
+    if (this.direction.x === 0 && this.direction.y === 0) {
+      return this.images.bot
+    } else if (this.direction.x === 1) {
+      return this.images.right
+    } else if (this.direction.x === -1) {
+      return this.images. left
+    } else if (this.direction.y === 1) {
+      return this.images.bot
+    } else {
+      return this.images.top
+    }
   }
 
   public update() {
@@ -61,8 +124,6 @@ class Player implements IPlayer {
     } else {
       this.shine = false
     }
-
-    this.move()
     this.leaveBomb()
   }
 
@@ -96,6 +157,12 @@ class Player implements IPlayer {
     }
 
     if (direction) {
+      if (direction.x !== this.direction.x || direction.y !== this.direction.y) {
+        this.frame = 0
+      }
+
+      this.direction = direction
+
       let newPos: IPosition = {
         x: this.absolutePosition.x + (direction.x * this.moveSpeed),
         y: this.absolutePosition.y + (direction.y * this.moveSpeed),
@@ -104,6 +171,7 @@ class Player implements IPlayer {
       let physicsResult = physicMove(this.position, direction, newPos)
 
       if (physicsResult.physicalValid) {
+        this.moving = true
         let playerTile = tiles.player
         let playerIndexInLayer = game.getCoordinate(this.position).indexOf(playerTile.id)
 
@@ -115,7 +183,11 @@ class Player implements IPlayer {
           x: this.absolutePosition.x / game.tileSize,
           y: this.absolutePosition.y / game.tileSize
         }
+      } else {
+        this.moving = false
       }
+    } else {
+      this.moving = false
     }
   }
 
@@ -135,6 +207,7 @@ class Player implements IPlayer {
     game.forCoordinates(pos => {
       if (arrayContains<number>(game.getCoordinate(pos), tiles.player.id)) {
         this.position = pos
+        this.direction = {x: 0, y: 0}
         this.absolutePosition = toAbsoloutePosition(pos)
         this.absoluteCoordinatePosition = pos
       }

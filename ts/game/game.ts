@@ -77,17 +77,17 @@ const game: IGame = {
           if (arrayContains<number>(coordinate, tiles.explosion.id) || enemy) {
             player.damage()
           }
-          game.drawSprite(player.absolutePosition, makeImage(tiles.player.sprite))
+          game.drawSprite(player.absolutePosition, player.image)
           continue
         } else if (tile === tiles.bomb) {
           let bomb = bombManager.getBombByCoordinate(pos)
-          game.drawAnimation(toAbsoloutePosition(pos), bomb.image)
+          game.drawSprite(toAbsoloutePosition(pos), bomb.image)
           continue
         } else if (tile === tiles.explosion) {
           if (!isTileDestructive(coordinate)) {
             let explosion = bombManager.getExplosionByCoordinate(pos);
             if (explosion) {
-              game.drawAnimation(toAbsoloutePosition(pos), explosion.image)
+              game.drawSprite(toAbsoloutePosition(pos), explosion.image)
             }
             continue;
           }
@@ -128,9 +128,6 @@ const game: IGame = {
     game.reseting = false;
   },
   drawSprite: (pos: IPosition, image: HTMLImageElement) => {
-    game.context.drawImage(image, pos.x, pos.y, game.tileSize, game.tileSize)
-  },
-  drawAnimation: (pos: IPosition, image: HTMLImageElement) => {
     game.context.drawImage(image, pos.x, pos.y, game.tileSize, game.tileSize)
   }
 }

@@ -21,19 +21,14 @@ interface IAnim {
 
 //game.ts
 interface IGame {
-  context: CanvasRenderingContext2D;
-  firstDraw: boolean;
   tileSize: number;
-  updaterId: number;
-  reseting: boolean;
-  getCoordinate: IGameCoordinate;
-  forCoordinates: IGameForCoordinates;
   start: Function;
   update: Function;
   reset: Function;
-  drawSprite: IGameSprite;
-  scenario: Array<Array<Array<number>>>;
-  scenarioBuffer: Array<Array<Array<IAnim>>>;
+  scenario: Array<Array<Array<number>>>
+  scenarioBuffer: Array<Array<Array<IAnim>>>
+  portalBuffer: HTMLImageElement;
+  onDestroyBox: IPositionFunction
 }
 
 interface IGameSprite { (pos: IPosition, image: HTMLImageElement): void }
@@ -82,6 +77,7 @@ interface ITile extends ITileKeys {
   explosion: ITileItem;
   enemySimpleMove: ITileItem;
   enemyNestedMove: ITileItem;
+  portal: ITileItem;
 }
 
 interface ITileItem {

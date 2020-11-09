@@ -1,5 +1,5 @@
-import game from "../game/game.js"
 import tiles from '../game/tiles.js';
+import game from '../game/game.js';
 
 export const getTileById: IGetTileById = (tileId: number): ITileItem => {
   let tile: ITileItem;
@@ -99,3 +99,13 @@ export const makeImage: IMakeImage = (sprite: string): HTMLImageElement => {
 export const roundToFixed = (number: number, fixed: number): number => {
   return parseFloat((number).toFixed(fixed))
 }
+
+export const forCoordinates = (doOnCoordinate: IPositionFunction) => {
+  for (let y = 0; y < game.scenario.length; y++) {
+    for (let x = 0; x < game.scenario[y].length; x++) {
+      doOnCoordinate({x: x, y: y})
+    }
+  }
+}
+
+export const getCoordinate = (pos: IPosition) => game.scenario[pos.y][pos.x]

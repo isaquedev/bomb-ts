@@ -1,7 +1,10 @@
 import game from "../game/game.js"
 import player from "./player.js"
 import tiles from "../game/tiles.js"
-import { getLayer, isTileExplosivable, isTileDestructive, indexOfDestructibleTile, arrayContains } from '../utils/utils.js'
+import {
+  getLayer, isTileExplosivable, isTileDestructive,
+  indexOfDestructibleTile, arrayContains, getCoordinate
+} from '../utils/utils.js'
 import times from '../utils/times.js';
 import Explosion from './explosion.js';
 
@@ -28,8 +31,8 @@ const bombManager: IBombManager = {
     //TODO add bombs in bombs array to explode bomb on explosion colid with them
     let explosions: Array<IExplosion> = [new Explosion({x: bomb.x, y: bomb.y})]
 
-    let bombZIndex = game.getCoordinate({x: bomb.x, y: bomb.y}).indexOf(tiles.bomb.id)
-    game.getCoordinate({x: bomb.x, y: bomb.y})[bombZIndex] = tiles.explosion.id
+    let bombZIndex = getCoordinate({x: bomb.x, y: bomb.y}).indexOf(tiles.bomb.id)
+    getCoordinate({x: bomb.x, y: bomb.y})[bombZIndex] = tiles.explosion.id
     let directions = [
       { active: true, x: -1,  y: 0 },
       { active: true, x: 1,   y: 0 },
@@ -46,7 +49,7 @@ const bombManager: IBombManager = {
           if (isTileExplosivable(layer)) {
             let explosion = new Explosion(newPos)
             explosions.push(explosion)
-            game.getCoordinate(newPos).splice(0, 0, tiles.explosion.id)
+            getCoordinate(newPos).splice(0, 0, tiles.explosion.id)
             if (arrayContains<number>(layer, tiles.bomb.id)) {
               directions[direction].active = false
               foundedBombs.push(bombManager.bombs.find(bomb => bomb.x == newPos.x && bomb.y == newPos.y))
@@ -73,7 +76,7 @@ const bombManager: IBombManager = {
     bombManager.explosionIds.forEach(id => clearTimeout(id))
     bombManager.explosions.forEach(explosion => {
       explosion.stopAnimation()
-      game.getCoordinate(explosion.position).splice(0, 1)
+      getCoordinate(explosion.position).splice(0, 1)
     })
     bombManager.bombs = []
     bombManager.explosions = []
@@ -86,10 +89,11 @@ const bombManager: IBombManager = {
       let explosionIndex = bombManager.explosions.indexOf(explosion)
       bombManager.explosions.splice(explosionIndex, 1)
 
-      game.getCoordinate(explosion.position).splice(0, 1) //TODO migrate to remote first explosion sprite
-      if (isTileDestructive(game.getCoordinate(explosion.position))) {
-        game.getCoordinate(explosion.position).splice(0, 1) //TODO migrate to remove first box sprite
+      getCoordinate(explosion.position).splice(0, 1) //TODO migrate to remote first explosion sprite
+      if (isTileDestructive(getCoordinate(explosion.position))) {
+        getCoordinate(explosion.position).splice(0, 1) //TODO migrate to remove first box sprite
         game.scenarioBuffer[explosion.position.y][explosion.position.x].splice(1,1)
+        game.onDestroyBox(explosion.position)
       }
     }
   }

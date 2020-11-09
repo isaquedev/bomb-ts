@@ -1,7 +1,7 @@
 import game from "../game/game.js";
 import times from "../utils/times.js";
 import { enemySlowMove, physicEnemyMove, isTileEnemyIIsTileAvailable } from '../utils/physics.js';
-import { random, toAbsoloutePosition } from "../utils/utils.js";
+import { getCoordinate, random, toAbsoloutePosition } from "../utils/utils.js";
 
 abstract class BaseEnemy implements IBaseEnemy {
   public id = 0;
@@ -74,11 +74,11 @@ abstract class BaseEnemy implements IBaseEnemy {
 
   protected move(physicsResult: IPositionMove) {
     if (physicsResult.physicalValid) {
-      let enemyIndex = game.getCoordinate(this.position).indexOf(this.id)
-      game.getCoordinate(this.position).splice(enemyIndex, 1)
+      let enemyIndex = getCoordinate(this.position).indexOf(this.id)
+      getCoordinate(this.position).splice(enemyIndex, 1)
       this.position = physicsResult.coordinatePosition
       this.absolutePosition = physicsResult.absolutePostion
-      game.getCoordinate(this.position).push(this.id)
+      getCoordinate(this.position).push(this.id)
     }
   }
 
@@ -103,8 +103,8 @@ abstract class BaseEnemy implements IBaseEnemy {
       this.isInvulnerable = true;
       setTimeout(() => this.isInvulnerable = false, times.invulnerability)
     } else {
-      let enemyIndex = game.getCoordinate(this.position).indexOf(this.id)
-      game.getCoordinate(this.position).splice(enemyIndex, 1)
+      let enemyIndex = getCoordinate(this.position).indexOf(this.id)
+      getCoordinate(this.position).splice(enemyIndex, 1)
       this.destroy()
     }
   }

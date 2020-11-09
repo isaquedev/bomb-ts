@@ -1,7 +1,7 @@
 import enemyManager from "../enemy/enemy_manager.js";
 import game from "../game/game.js";
 import tiles from "../game/tiles.js";
-import { getTileById, roundToFixed } from "./utils.js";
+import { getCoordinate, getTileById, roundToFixed } from "./utils.js";
 
 export const playerSpeed = 5;
 
@@ -144,7 +144,7 @@ export const isTileAvailable: IIsTileAvailable = (
   currentPosition: IPosition): boolean => {
   let available = true
 
-  let physicCoordinate = game.getCoordinate(physicsPosition)
+  let physicCoordinate = getCoordinate(physicsPosition)
 
   physicCoordinate.forEach(tileId => {
     let tile = getTileById(tileId)
@@ -218,7 +218,7 @@ export const isTileEnemyIIsTileAvailable: IIsTileEnemyAvailable = (
   currentPosition: IPosition): boolean => {
     let available = true
 
-  let physicCoordinate = game.getCoordinate(physicsPosition)
+  let physicCoordinate = getCoordinate(physicsPosition)
 
   if (direction.x !== 0) {
     let perfectY = isCenteredPosition(absolutePosition.y)

@@ -1,5 +1,7 @@
 import game from "../game/game.js"
-import { arrayContains, toAbsoloutePosition } from '../utils/utils.js';
+import {
+  arrayContains, forCoordinates, getCoordinate, toAbsoloutePosition
+} from '../utils/utils.js';
 import tiles from '../game/tiles.js';
 import bombManager from './bombs.js';
 import times from '../utils/times.js';
@@ -172,11 +174,11 @@ class Player implements IPlayer {
       if (physicsResult.physicalValid) {
         this.moving = true
         let playerTile = tiles.player
-        let playerIndexInLayer = game.getCoordinate(this.position).indexOf(playerTile.id)
+        let playerIndexInLayer = getCoordinate(this.position).indexOf(playerTile.id)
 
-        game.getCoordinate(this.position).splice(playerIndexInLayer, 1)
+        getCoordinate(this.position).splice(playerIndexInLayer, 1)
         this.position = physicsResult.coordinatePosition
-        game.getCoordinate(physicsResult.coordinatePosition).push(playerTile.id)
+        getCoordinate(physicsResult.coordinatePosition).push(playerTile.id)
         this.absolutePosition = physicsResult.absolutePostion
       } else {
         this.moving = false
@@ -199,8 +201,8 @@ class Player implements IPlayer {
       moveRight: false,
       moveTop: false
     }
-    game.forCoordinates(pos => {
-      if (arrayContains<number>(game.getCoordinate(pos), tiles.player.id)) {
+    forCoordinates(pos => {
+      if (arrayContains<number>(getCoordinate(pos), tiles.player.id)) {
         this.position = pos
         this.direction = {x: 0, y: 0}
         this.absolutePosition = toAbsoloutePosition(pos)
@@ -217,7 +219,7 @@ class Player implements IPlayer {
 
     let pos = this.position
 
-    let layer = game.getCoordinate(pos)
+    let layer = getCoordinate(pos)
     let bomb = tiles.bomb
     if (layer.indexOf(bomb.id) === -1) {
       let bombId = Math.random()

@@ -1,5 +1,5 @@
 const tiles: ITile = {
-  ground :{
+  ground: {
     id: 0,
     animated: false,
     sprite: 'grass',
@@ -78,6 +78,16 @@ const tiles: ITile = {
     explosivable: false,
     isPlayer: false,
     isEnemy: true
+  },
+  portal: {
+    id: 8,
+    animated: false,
+    sprite: 'portal',
+    frames: 0,
+    physics: false,
+    explosivable: false,
+    isPlayer: false,
+    isEnemy: false
   }
 }
 

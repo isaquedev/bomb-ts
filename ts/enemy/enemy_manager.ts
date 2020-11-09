@@ -1,6 +1,5 @@
-import game from "../game/game.js"
 import tiles from "../game/tiles.js"
-import { arrayContains } from "../utils/utils.js"
+import { arrayContains, forCoordinates, getCoordinate } from "../utils/utils.js"
 import EnemySimpleMove from './enemy_simple_move.js';
 import EnemyNestedMove from "./enemy_nested_move.js";
 
@@ -12,8 +11,8 @@ const enemyManager: IEnemyManager = {
     enemyManager.enemies.forEach(enemy => enemy.destroy())
     enemyManager.enemies = []
 
-    game.forCoordinates(pos => {
-      let coordinate = game.getCoordinate(pos)
+    forCoordinates(pos => {
+      let coordinate = getCoordinate(pos)
       let enemy: IBaseEnemy
       if (arrayContains<number>(coordinate, tiles.enemySimpleMove.id)) {
         enemy = new EnemySimpleMove()

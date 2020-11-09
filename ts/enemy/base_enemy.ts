@@ -2,7 +2,6 @@ import game from "../game/game.js";
 import times from "../utils/times.js";
 import { enemySlowMove, physicEnemyMove, isTileEnemyIIsTileAvailable } from '../utils/physics.js';
 import { random, toAbsoloutePosition } from "../utils/utils.js";
-import EnemyNestedMove from './enemy_nested_move.js';
 
 abstract class BaseEnemy implements IBaseEnemy {
   public id = 0;
@@ -13,7 +12,8 @@ abstract class BaseEnemy implements IBaseEnemy {
 
   protected direction: IPosition = {x: 0, y: 0}
   private isInvulnerable = false;
-  private shine = false;
+  private moveIntervalId: number
+  private destroyed = false
 
   public start(pos: IPosition) {
     this.uuid = Math.random().toFixed(4) + Math.random().toFixed(4)
@@ -22,16 +22,18 @@ abstract class BaseEnemy implements IBaseEnemy {
     this.randomAvailableDirection()
     this.startEnemy()
     this.setId()
+    this.moveIntervalId = setInterval(() => {
+      if (this.destroyed) return
+      this.moveEnemy()
+    }, times.gameUpdateMove)
   }
 
   protected abstract startEnemy(): void
 
   protected abstract setId(): void
 
-  public update(skipFrame: boolean) {
-    if (!skipFrame) {
-      this.moveEnemy()
-    }
+  public update() {
+    
   }
 
   protected findAvailableDirections(): Array<IPosition> {
@@ -105,6 +107,12 @@ abstract class BaseEnemy implements IBaseEnemy {
       game.getCoordinate(this.position).splice(enemyIndex, 1)
     }
   }
+
+  public destroy() {
+    this.destroyed = true
+    clearInterval(this.moveIntervalId)
+  }
+
 }
 
 export default BaseEnemy

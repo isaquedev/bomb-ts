@@ -183,6 +183,7 @@ interface IBaseEnemy {
   start: Function;
   update: Function;
   damage: Function;
+  destroy: Function;
 }
 
 interface IEnemyManager {
@@ -230,7 +231,7 @@ interface ITimes {
   gameUpdate: number,
   gameUpdateMove: number
   gameUpdateMoveAnim: number,
-  gameObjectAnim: number,
+  gameObjectAnim: number
   invulnerability: number,
   bombDelayToExplode: number,
   explosionDuration: number,

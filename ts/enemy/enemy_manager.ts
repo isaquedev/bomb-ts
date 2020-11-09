@@ -9,6 +9,7 @@ const enemyManager: IEnemyManager = {
   skipCount: 0,
   skipMax: 2,
   start: () => {
+    enemyManager.enemies.forEach(enemy => enemy.destroy())
     enemyManager.enemies = []
 
     game.forCoordinates(pos => {

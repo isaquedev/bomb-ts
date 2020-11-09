@@ -16,7 +16,6 @@ interface IAnimDirections {
 
 class Player implements IPlayer {
   public position: IPosition = {x: 1, y: 1}
-  public absoluteCoordinatePosition: IPosition = {x: 0, y: 0}
   public absolutePosition: IPosition = {x: 0, y: 0}
   public bomber: IBomber = {bombPower: 1, bombCount: 1}
 
@@ -179,10 +178,6 @@ class Player implements IPlayer {
         this.position = physicsResult.coordinatePosition
         game.getCoordinate(physicsResult.coordinatePosition).push(playerTile.id)
         this.absolutePosition = physicsResult.absolutePostion
-        this.absoluteCoordinatePosition = {
-          x: this.absolutePosition.x / game.tileSize,
-          y: this.absolutePosition.y / game.tileSize
-        }
       } else {
         this.moving = false
       }
@@ -209,7 +204,6 @@ class Player implements IPlayer {
         this.position = pos
         this.direction = {x: 0, y: 0}
         this.absolutePosition = toAbsoloutePosition(pos)
-        this.absoluteCoordinatePosition = pos
       }
     })
   }

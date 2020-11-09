@@ -73,7 +73,12 @@ class Game implements IGame {
             let tile = getTileById(id)
             return tile.isEnemy
           })
-          if (arrayContains<number>(coordinate, tiles.explosion.id) || enemy) {
+          if (arrayContains<number>(coordinate, tiles.portal.id)) {
+            if (enemyManager.enemies.length === 0) {
+              this.fase = 1
+              this.reset()
+            }
+          } else if (arrayContains<number>(coordinate, tiles.explosion.id) || enemy) {
             player.damage()
           }
           this.drawSprite(player.absolutePosition, player.image)
@@ -133,7 +138,7 @@ class Game implements IGame {
 
   public onDestroyBox(pos: IPosition) {
     let chance = random(1, 100)
-    if (chance > 80) {
+    if (chance > 90) {
       game.portalBuffer = makeImage(tiles.portal.sprite)
       getCoordinate(pos).push(tiles.portal.id)
     }

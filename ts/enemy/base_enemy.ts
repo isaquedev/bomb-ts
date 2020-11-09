@@ -105,6 +105,7 @@ abstract class BaseEnemy implements IBaseEnemy {
     } else {
       let enemyIndex = game.getCoordinate(this.position).indexOf(this.id)
       game.getCoordinate(this.position).splice(enemyIndex, 1)
+      this.destroy()
     }
   }
 
